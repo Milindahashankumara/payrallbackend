@@ -10,6 +10,8 @@ using payrallproject.Data;
 using payrallproject.Services.EmailServices;
 using payrallproject.Services.AuthService;
 using payrallproject.Models.Domains;
+using payrallproject.Services.EmployeeService;
+using payrallproject.Services.RolesService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,22 +29,9 @@ options.UseSqlServer(builder.Configuration.GetConnectionString("dbstring")));
 
 builder.Services.AddScoped<ITokenRepository, TokenRepository>();
 builder.Services.AddTransient<IEmailService, EmailService>();
-
-//builder.Services.AddIdentityCore<User>()
-//    .AddRoles<IdentityRole>()
-//    .AddTokenProvider<DataProtectorTokenProvider<User>>("arithmos")
-//    .AddEntityFrameworkStores<AuthDbContext>()
-//    .AddDefaultTokenProviders();
-
-//builder.Services.Configure<IdentityOptions>(options =>
-//{
-//    options.Password.RequireNonAlphanumeric = false;
-//    options.Password.RequireDigit = false;
-//    options.Password.RequireLowercase = false;
-//    options.Password.RequireUppercase = false;
-//    options.Password.RequiredLength = 6;
-//    options.Password.RequiredUniqueChars = 1;
-//});
+builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+builder.Services.AddScoped<IRolesService, RolesService>();
+//builder.Services.AddScoped<IOTService, OTService>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>

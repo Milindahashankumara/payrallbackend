@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-//using AssetManagementSystem.Models;
-//using AuthService.Models.Dtos;
+using payrallproject.Models.Domains;
+using payrallproject.Models.Dtos;
 
 namespace payrallproject.Mappings
 {
@@ -8,9 +8,7 @@ namespace payrallproject.Mappings
     {
         public MapperProfiles()
         {
-            //CreateMap<User, UserDto>().ReverseMap();
-
-            //CreateMap<UserUpdateDto, User>();
+            CreateMap<Employe, EmployeDto>().ReverseMap();
         }
     }
     
