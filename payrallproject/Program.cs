@@ -12,6 +12,9 @@ using payrallproject.Services.AuthService;
 using payrallproject.Models.Domains;
 using payrallproject.Services.EmployeeService;
 using payrallproject.Services.RolesService;
+using payrallproject.Services.OTService;
+using payrallproject.Services.EmployeeCategoriesService;
+using payrallproject.Services.DepartmentService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,13 +28,15 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AuthDbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("dbstring")));
 
-//builder.Services.AddAutoMapper(typeof(MapperProfiles));
+builder.Services.AddAutoMapper(typeof(MapperProfiles).Assembly);
 
 builder.Services.AddScoped<ITokenRepository, TokenRepository>();
 builder.Services.AddTransient<IEmailService, EmailService>();
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 builder.Services.AddScoped<IRolesService, RolesService>();
-//builder.Services.AddScoped<IOTService, OTService>();
+builder.Services.AddScoped<IOTService, OTService>();
+builder.Services.AddScoped<IEmployeeCategoriesService, EmployeeCategoriesService>();
+builder.Services.AddScoped<IDepartmentService, DepartmentService>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>

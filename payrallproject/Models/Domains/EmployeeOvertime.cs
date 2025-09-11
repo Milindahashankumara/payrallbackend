@@ -7,12 +7,12 @@ namespace payrallproject.Models.Domains
     {
         [Key]
         public int? Id { get; set; }
-        public string? EmployeId { get; set; }
+        public int? EmployeId { get; set; }
         [ForeignKey(nameof(EmployeId))]
-        public User Employe { get; set; }
-        public string? OTId { get; set; }
+        public Employe Employe { get; set; }
+        public int? OTId { get; set; }
         [ForeignKey(nameof(OTId))]
-        public User OT { get; set; }
+        public OT OT { get; set; }
         public DateTime? DateWorked { get; set; }
         public int? HoursWorked { get; set; }
     }

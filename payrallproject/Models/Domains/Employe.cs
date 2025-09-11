@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace payrallproject.Models.Domains
 {
@@ -14,8 +15,12 @@ namespace payrallproject.Models.Domains
         public DateTime? JoinedDate { get; set; }
         public DateTime? TerminationDate { get; set; }
         public string? PhoneNumber { get; set; }
-        public string? Department { get; set; }
-        public string? SubDepartment { get; set; }
+        public int? DepartmentID { get; set; }
+        [ForeignKey(nameof(DepartmentID))]
+        public Department Department { get; set; }
+        public int? SubDepartmentID { get; set; }
+        [ForeignKey(nameof(SubDepartmentID))]
+        public EmployeeCategories EmployeeCategories { get; set; }
         public int? BasicSalary { get; set; }
         public int? DaySalary { get; set; }
         public int? KPI { get; set; }

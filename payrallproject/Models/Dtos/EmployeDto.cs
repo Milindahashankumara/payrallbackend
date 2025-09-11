@@ -4,7 +4,6 @@ namespace payrallproject.Models.Dtos
 {
     public class EmployeDto
     {
-        public int? Id { get; set; }
         public string? EmployeeNumber { get; set; }
         public string? Email { get; set; }
         public string? Address { get; set; }

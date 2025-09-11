@@ -9,6 +9,7 @@ namespace payrallproject.Mappings
         public MapperProfiles()
         {
             CreateMap<Employe, EmployeDto>().ReverseMap();
+            CreateMap<OT, OTDto>().ReverseMap();
         }
     }
     

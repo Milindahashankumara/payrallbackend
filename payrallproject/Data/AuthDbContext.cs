@@ -17,6 +17,11 @@ namespace payrallproject.Data
         public DbSet<Roles> Roles { get; set; }
         public DbSet<UserRoles> UserRoles { get; set; }
         public DbSet<PasswordResetTokens> PasswordResetTokens { get; set; }
+        public DbSet<OT> OT { get; set; }
+        public DbSet<EmployeeCategories> EmployeeCategories { get; set; }
+        public DbSet<Department> Departments { get; set; }
+        public DbSet<EmployeeOvertime> EmployeeOvertimes { get; set; }
+
 
         //protected override void OnModelCreating(ModelBuilder builder)
         //{

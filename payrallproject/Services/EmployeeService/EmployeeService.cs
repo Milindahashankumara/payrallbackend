@@ -11,16 +11,16 @@ namespace payrallproject.Services.EmployeeService
     public class EmployeeService : IEmployeeService
     {
         private readonly AuthDbContext _dbContext;
-        private readonly IMapper mapper;
+        private readonly IMapper _mapper;
         public EmployeeService(AuthDbContext dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
-            this.mapper = mapper;
+            _mapper = mapper;
         }
 
         public async Task<Employe> AddEmployeAsync(EmployeDto employeDto)
         {
-            var NewEmploye = mapper.Map<Employe>(employeDto);
+            var NewEmploye = _mapper.Map<Employe>(employeDto);
             NewEmploye.IsActive = true;
             await _dbContext.Employe.AddAsync(NewEmploye);
             await _dbContext.SaveChangesAsync();
@@ -115,7 +115,7 @@ namespace payrallproject.Services.EmployeeService
             {
                 return null;
             }
-            SelectedEmploye = mapper.Map(employeDto, SelectedEmploye);
+            _mapper.Map(employeDto, SelectedEmploye);
             await _dbContext.SaveChangesAsync();
             return SelectedEmploye;
         }

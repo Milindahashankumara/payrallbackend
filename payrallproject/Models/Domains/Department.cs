@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace payrallproject.Models.Domains
 {
-    public class Departments
+    public class Department
     {
         [Key]
         public int? Id { get; set; }
@@ -13,6 +13,6 @@ namespace payrallproject.Models.Domains
         public int? EmployeeCategoriesId { get; set; }
         [ForeignKey(nameof(EmployeeCategoriesId))]
         public EmployeeCategories EmployeeCategories { get; set; }
-        public bool? IsActive { get; set; } = true;
+        public bool? IsActive { get; set; }
     }
 }
