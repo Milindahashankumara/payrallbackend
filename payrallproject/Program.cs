@@ -15,6 +15,8 @@ using payrallproject.Services.RolesService;
 using payrallproject.Services.OTService;
 using payrallproject.Services.EmployeeCategoriesService;
 using payrallproject.Services.DepartmentService;
+using payrallproject.Services.LoanService;
+using payrallproject.Services.SalaryReportService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,6 +39,8 @@ builder.Services.AddScoped<IRolesService, RolesService>();
 builder.Services.AddScoped<IOTService, OTService>();
 builder.Services.AddScoped<IEmployeeCategoriesService, EmployeeCategoriesService>();
 builder.Services.AddScoped<IDepartmentService, DepartmentService>();
+builder.Services.AddScoped<ILoanService, LoanService>();
+builder.Services.AddScoped<ISalaryReportService, SalaryReportService>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>

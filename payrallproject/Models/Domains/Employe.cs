@@ -18,12 +18,13 @@ namespace payrallproject.Models.Domains
         public int? DepartmentID { get; set; }
         [ForeignKey(nameof(DepartmentID))]
         public Department Department { get; set; }
-        public int? SubDepartmentID { get; set; }
-        [ForeignKey(nameof(SubDepartmentID))]
+        public int? EmployeeCategoriesID { get; set; }
+        [ForeignKey(nameof(EmployeeCategoriesID))]
         public EmployeeCategories EmployeeCategories { get; set; }
         public int? BasicSalary { get; set; }
         public int? DaySalary { get; set; }
-        public int? KPI { get; set; }
+        public int? KPIrate { get; set; }
+        public int? KPIamount { get; set; }
         public int? BRA1 { get; set; }
         public int? BRA2 { get; set; }
         public bool IsActive { get; set; } = true;

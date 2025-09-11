@@ -12,11 +12,12 @@ namespace payrallproject.Models.Dtos
         public DateTime? JoinedDate { get; set; }
         public DateTime? TerminationDate { get; set; }
         public string? PhoneNumber { get; set; }
-        public string? Department { get; set; }
-        public string? SubDepartment { get; set; }
+        public string? DepartmentID { get; set; }
+        public string? EmployeeCategoriesID { get; set; }
         public int? BasicSalary { get; set; }
         public int? DaySalary { get; set; }
-        public int? KPI { get; set; }
+        public int? KPIrate { get; set; }
+        public int? KPIamount { get; set; }
         public int? BRA1 { get; set; }
         public int? BRA2 { get; set; }
         public bool IsActive { get; set; } = true;
