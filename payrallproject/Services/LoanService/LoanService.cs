@@ -16,6 +16,12 @@ namespace payrallproject.Services.LoanService
 
         public async Task<Loans> AddLoansAsync(LoansDto newLoans)
         {
+            // Calculate monthly installment automatically
+            decimal monthlyInterestRate = newLoans.InterestRate / 100 / 12;
+            decimal monthlyInstallment = newLoans.PrincipalAmount *
+                (monthlyInterestRate * (decimal)Math.Pow(1 + (double)monthlyInterestRate, newLoans.TermMonths)) /
+                (decimal)(Math.Pow(1 + (double)monthlyInterestRate, newLoans.TermMonths) - 1);
+
             var loan = new Loans
             {
                 EmployeID = newLoans.EmployeID,
@@ -23,8 +29,8 @@ namespace payrallproject.Services.LoanService
                 InterestRate = newLoans.InterestRate,
                 TermMonths = newLoans.TermMonths,
                 LoanType = newLoans.LoanType,
-                MonthlyInstallment = newLoans.MonthlyInstallment,
-                RemainingBalance = newLoans.RemainingBalance,
+                MonthlyInstallment = Math.Round(monthlyInstallment, 2), // Auto-calculated
+                RemainingBalance = newLoans.PrincipalAmount, // Start with full principal
                 StartDate = newLoans.StartDate,
                 IsActive = newLoans.IsActive
             };

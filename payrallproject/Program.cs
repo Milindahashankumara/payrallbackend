@@ -1,21 +1,22 @@
-using Microsoft.Extensions.DependencyInjection;
-using payrallproject.Mappings;
-using payrallproject.Models.Helpter;
 using AutoMapper;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using payrallproject.Data;
-using payrallproject.Services.EmailServices;
-using payrallproject.Services.AuthService;
+using payrallproject.Mappings;
 using payrallproject.Models.Domains;
-using payrallproject.Services.EmployeeService;
-using payrallproject.Services.RolesService;
-using payrallproject.Services.OTService;
-using payrallproject.Services.EmployeeCategoriesService;
+using payrallproject.Models.Helpter;
+using payrallproject.Services.AuthService;
 using payrallproject.Services.DepartmentService;
+using payrallproject.Services.EmailServices;
+using payrallproject.Services.EmployeeCategoriesService;
+using payrallproject.Services.EmployeeService;
+using payrallproject.Services.LoanRepaymentService;
 using payrallproject.Services.LoanService;
+using payrallproject.Services.OTService;
+using payrallproject.Services.RolesService;
 using payrallproject.Services.SalaryReportService;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -41,6 +42,7 @@ builder.Services.AddScoped<IEmployeeCategoriesService, EmployeeCategoriesService
 builder.Services.AddScoped<IDepartmentService, DepartmentService>();
 builder.Services.AddScoped<ILoanService, LoanService>();
 builder.Services.AddScoped<ISalaryReportService, SalaryReportService>();
+builder.Services.AddScoped<ILoanRepaymentService, LoanRepaymentService>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
