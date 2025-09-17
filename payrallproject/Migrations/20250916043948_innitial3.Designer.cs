@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using payrallproject.Data;
 
@@ -11,9 +12,11 @@ using payrallproject.Data;
 namespace payrallproject.Migrations
 {
     [DbContext(typeof(AuthDbContext))]
-    partial class AuthDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250916043948_innitial3")]
+    partial class innitial3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -190,45 +193,6 @@ namespace payrallproject.Migrations
                     b.HasIndex("OTId");
 
                     b.ToTable("EmployeeOvertimes");
-                });
-
-            modelBuilder.Entity("payrallproject.Models.Domains.Leaves", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<double>("AnnualLeavesAllocated")
-                        .HasColumnType("float");
-
-                    b.Property<double>("AnnualLeavesUsed")
-                        .HasColumnType("float");
-
-                    b.Property<double>("CasualLeavesAllocated")
-                        .HasColumnType("float");
-
-                    b.Property<double>("CasualLeavesUsed")
-                        .HasColumnType("float");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("EmployeID")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Year")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EmployeID");
-
-                    b.ToTable("Leaves");
                 });
 
             modelBuilder.Entity("payrallproject.Models.Domains.LoanRepayment", b =>
@@ -571,17 +535,6 @@ namespace payrallproject.Migrations
                     b.Navigation("Employe");
 
                     b.Navigation("OT");
-                });
-
-            modelBuilder.Entity("payrallproject.Models.Domains.Leaves", b =>
-                {
-                    b.HasOne("payrallproject.Models.Domains.Employe", "Employe")
-                        .WithMany()
-                        .HasForeignKey("EmployeID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Employe");
                 });
 
             modelBuilder.Entity("payrallproject.Models.Domains.LoanRepayment", b =>

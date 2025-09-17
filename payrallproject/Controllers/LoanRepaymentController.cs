@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using payrallproject.Models.Domains;
+using payrallproject.Models.Dtos;
 using payrallproject.Services.LoanRepaymentService;
 using System.ComponentModel.DataAnnotations;
 
@@ -18,11 +19,14 @@ namespace payrallproject.Controllers
         }
 
         [HttpPost("{loanId}/repayments")]
-        public async Task<ActionResult<LoanRepayment>> AddRepayment(int loanId, [FromBody] RepaymentDto dto)
+        public async Task<ActionResult<LoanRepayment>> AddRepayment(int loanId, [FromBody] LoanRepaymentDto dto)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
             try
             {
-                var repayment = await _repaymentService.AddRepaymentAsync(loanId, dto.PaymentAmount, dto.PaymentDate);
+                var repayment = await _repaymentService.AddRepaymentAsync(loanId, dto.InstallmentAmount, dto.PaymentDate);
                 return Ok(repayment);
             }
             catch (ArgumentException ex)
@@ -37,14 +41,12 @@ namespace payrallproject.Controllers
             var repayments = await _repaymentService.GetRepaymentsByLoanIdAsync(loanId);
             return Ok(repayments);
         }
-    }
 
-    public class RepaymentDto
-    {
-        [Required]
-        [Range(0.01, double.MaxValue)]
-        public decimal PaymentAmount { get; set; }
-
-        public DateTime PaymentDate { get; set; } = DateTime.UtcNow;
+        [HttpGet("{loanId}/next-payment")]
+        public async Task<ActionResult<decimal>> GetNextPaymentAmount(int loanId)
+        {
+            var amount = await _repaymentService.CalculateNextPaymentAmountAsync(loanId);
+            return Ok(amount);
+        }
     }
 }

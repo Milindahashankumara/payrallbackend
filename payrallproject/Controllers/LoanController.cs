@@ -38,6 +38,9 @@ namespace payrallproject.Controllers
         [HttpPost]
         public async Task<ActionResult<Loans>> Create(LoansDto dto)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
             var loan = await _loanService.AddLoansAsync(dto);
             return CreatedAtAction(nameof(GetById), new { id = loan.Id }, loan);
         }
@@ -45,6 +48,9 @@ namespace payrallproject.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<Loans>> Update(int id, LoansDto dto)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
             var updated = await _loanService.UpdateLoansAsync(id, dto);
             if (updated == null) return NotFound();
             return Ok(updated);

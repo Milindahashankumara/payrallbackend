@@ -13,6 +13,7 @@ using payrallproject.Services.DepartmentService;
 using payrallproject.Services.EmailServices;
 using payrallproject.Services.EmployeeCategoriesService;
 using payrallproject.Services.EmployeeService;
+using payrallproject.Services.LeavesService;
 using payrallproject.Services.LoanRepaymentService;
 using payrallproject.Services.LoanService;
 using payrallproject.Services.OTService;
@@ -43,6 +44,7 @@ builder.Services.AddScoped<IDepartmentService, DepartmentService>();
 builder.Services.AddScoped<ILoanService, LoanService>();
 builder.Services.AddScoped<ISalaryReportService, SalaryReportService>();
 builder.Services.AddScoped<ILoanRepaymentService, LoanRepaymentService>();
+builder.Services.AddScoped<ILeavesService, LeavesService>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>

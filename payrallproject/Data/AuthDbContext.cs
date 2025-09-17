@@ -22,6 +22,9 @@ namespace payrallproject.Data
         public DbSet<Department> Departments { get; set; }
         public DbSet<EmployeeOvertime> EmployeeOvertimes { get; set; }
         public DbSet<SalaryReport> SalaryReports { get; set; }
+        public DbSet<Loans> Loans { get; set; }
+        public DbSet<LoanRepayment> Loanrepayment { get; set; }
+        public DbSet<Leaves> Leaves { get; set; }
 
 
         //protected override void OnModelCreating(ModelBuilder builder)

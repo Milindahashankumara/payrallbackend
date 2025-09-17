@@ -97,5 +97,26 @@ namespace payrallproject.Controllers
             }
             return Ok(SelectedEmployee);
         }
+        [HttpGet]
+        [Route("employeeshaveleaves")]
+        public async Task<IActionResult> GetAllEmployeesHaveLeaves(
+            [FromQuery] string? filterOn, [FromQuery] string? filterQuery,
+            [FromQuery] string? sortBy, [FromQuery] bool? isAscending,
+            [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+        {
+            var AllEmployees = await _employeeService.GetAllEmployeesAsync(filterOn, filterQuery, sortBy, isAscending ?? true, pageNumber, pageSize);
+            return Ok(AllEmployees);
+        }
+        [HttpGet]
+        [Route("employeeshaveleaves{id:int}")]
+        public async Task<IActionResult> GetAllEmployeesHaveLeavesById([FromRoute] int id)
+        {
+            var SelectedEmployee = await _employeeService.GetEmployeByIdAsync(id);
+            if (SelectedEmployee == null)
+            {
+                return NotFound();
+            }
+            return Ok(SelectedEmployee);
+        }
     }
 }

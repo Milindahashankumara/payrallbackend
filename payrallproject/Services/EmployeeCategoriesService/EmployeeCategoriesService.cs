@@ -36,7 +36,8 @@ namespace payrallproject.Services.EmployeeCategoriesService
             {
                 CategoryName = dto.CategoryName,
                 Description = dto.Description,
-                IsActive = true
+                IsActive = true,
+                DaySalarybased = dto.DaySalarybased,
             };
 
             _dbContext.EmployeeCategories.Add(category);
@@ -52,6 +53,7 @@ namespace payrallproject.Services.EmployeeCategoriesService
 
             category.CategoryName = dto.CategoryName;
             category.Description = dto.Description;
+            category.DaySalarybased = dto.DaySalarybased;
 
             await _dbContext.SaveChangesAsync();
             return category;

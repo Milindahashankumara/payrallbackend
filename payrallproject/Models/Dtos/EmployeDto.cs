@@ -12,8 +12,8 @@ namespace payrallproject.Models.Dtos
         public DateTime? JoinedDate { get; set; }
         public DateTime? TerminationDate { get; set; }
         public string? PhoneNumber { get; set; }
-        public string? DepartmentID { get; set; }
-        public string? EmployeeCategoriesID { get; set; }
+        public int? DepartmentID { get; set; }
+        public int? EmployeeCategoriesID { get; set; }
         public int? BasicSalary { get; set; }
         public int? DaySalary { get; set; }
         public int? KPIrate { get; set; }

@@ -1,5 +1,5 @@
-﻿using payrallproject.Models.Enums;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace payrallproject.Models.Domains
 {
@@ -8,18 +8,16 @@ namespace payrallproject.Models.Domains
         [Key]
         public int? Id { get; set; }
         public int? EmployeID { get; set; }
+        public Employe Employe { get; set; }
+        [ForeignKey(nameof(EmployeID))]
         public decimal PrincipalAmount { get; set; }
-        public decimal InterestRate { get; set; }
         public int TermMonths { get; set; }
 
-        public LoanType LoanType { get; set; }
         public decimal MonthlyInstallment { get; set; }
 
         public decimal RemainingBalance { get; set; }
         public DateTime StartDate { get; set; }
         public bool IsActive { get; set; } = true;
-
-        public Employe Employe { get; set; }
-        public ICollection<LoanRepayment> Repayments { get; set; }
+        public bool Settled { get; set; } = true;
     }
 }

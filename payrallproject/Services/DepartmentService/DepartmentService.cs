@@ -16,7 +16,47 @@ namespace payrallproject.Services.DepartmentService
         }
 
         // ✅ Get all active departments with optional filtering, sorting, pagination
-        public async Task<List<Department>> GetAllDepartmentAsync(
+        //public async Task<List<Department>> GetAllDepartmentAsync(
+        //    string? filterOn = null, string? filterQuery = null,
+        //    string? sortBy = null, bool isAscending = true,
+        //    int pageNumber = 1, int pageSize = 10)
+        //{
+        //    var query = _dbContext.Departments
+        //        .Include(d => d.EmployeeCategories)
+        //        .Where(d => d.IsActive == true)
+        //        .AsQueryable();
+
+        //    // Filtering
+        //    if (!string.IsNullOrWhiteSpace(filterOn) && !string.IsNullOrWhiteSpace(filterQuery))
+        //    {
+        //        if (filterOn.Equals("DepartmentName", StringComparison.OrdinalIgnoreCase))
+        //        {
+        //            query = query.Where(d => d.DepartmentName.Contains(filterQuery));
+        //        }
+        //        else if (filterOn.Equals("Description", StringComparison.OrdinalIgnoreCase))
+        //        {
+        //            query = query.Where(d => d.Description != null && d.Description.Contains(filterQuery));
+        //        }
+        //    }
+
+        //    // Sorting
+        //    if (!string.IsNullOrWhiteSpace(sortBy))
+        //    {
+        //        query = sortBy.ToLower() switch
+        //        {
+        //            "departmentname" => isAscending ? query.OrderBy(d => d.DepartmentName) : query.OrderByDescending(d => d.DepartmentName),
+        //            "description" => isAscending ? query.OrderBy(d => d.Description) : query.OrderByDescending(d => d.Description),
+        //            _ => query.OrderBy(d => d.Id)
+        //        };
+        //    }
+
+        //    // Pagination
+        //    query = query.Skip((pageNumber - 1) * pageSize).Take(pageSize);
+
+        //    return await query.ToListAsync();
+        //}
+
+        public async Task<List<DepartmentDto>> GetAllDepartmentAsync(
             string? filterOn = null, string? filterQuery = null,
             string? sortBy = null, bool isAscending = true,
             int pageNumber = 1, int pageSize = 10)
@@ -31,11 +71,16 @@ namespace payrallproject.Services.DepartmentService
             {
                 if (filterOn.Equals("DepartmentName", StringComparison.OrdinalIgnoreCase))
                 {
-                    query = query.Where(d => d.DepartmentName.Contains(filterQuery));
+                    query = query.Where(d => d.DepartmentName!.Contains(filterQuery));
                 }
                 else if (filterOn.Equals("Description", StringComparison.OrdinalIgnoreCase))
                 {
                     query = query.Where(d => d.Description != null && d.Description.Contains(filterQuery));
+                }
+                else if (filterOn.Equals("EmployeeCategoriesName", StringComparison.OrdinalIgnoreCase))
+                {
+                    query = query.Where(d => d.EmployeeCategories != null &&
+                                             d.EmployeeCategories.CategoryName!.Contains(filterQuery));
                 }
             }
 
@@ -44,8 +89,18 @@ namespace payrallproject.Services.DepartmentService
             {
                 query = sortBy.ToLower() switch
                 {
-                    "departmentname" => isAscending ? query.OrderBy(d => d.DepartmentName) : query.OrderByDescending(d => d.DepartmentName),
-                    "description" => isAscending ? query.OrderBy(d => d.Description) : query.OrderByDescending(d => d.Description),
+                    "departmentname" => isAscending
+                        ? query.OrderBy(d => d.DepartmentName)
+                        : query.OrderByDescending(d => d.DepartmentName),
+
+                    "description" => isAscending
+                        ? query.OrderBy(d => d.Description)
+                        : query.OrderByDescending(d => d.Description),
+
+                    "employeecategoriesname" => isAscending
+                        ? query.OrderBy(d => d.EmployeeCategories!.CategoryName)
+                        : query.OrderByDescending(d => d.EmployeeCategories!.CategoryName),
+
                     _ => query.OrderBy(d => d.Id)
                 };
             }
@@ -53,15 +108,40 @@ namespace payrallproject.Services.DepartmentService
             // Pagination
             query = query.Skip((pageNumber - 1) * pageSize).Take(pageSize);
 
-            return await query.ToListAsync();
+            // Projection into DTO
+            return await query.Select(d => new DepartmentDto
+            {
+                Id = d.Id,
+                DepartmentName = d.DepartmentName,
+                Description = d.Description,
+                EmployeeCategoriesId = d.EmployeeCategoriesId,
+                EmployeeCategoriesName = d.EmployeeCategories != null ? d.EmployeeCategories.CategoryName : null,
+                IsActive = d.IsActive
+            }).ToListAsync();
         }
 
         // ✅ Get active department by Id
-        public async Task<Department?> GetDepartmentByIdAsync(int id)
+        //public async Task<Department?> GetDepartmentByIdAsync(int id)
+        //{
+        //    return await _dbContext.Departments
+        //        .Include(d => d.EmployeeCategories)
+        //        .FirstOrDefaultAsync(d => d.Id == id && d.IsActive == true);
+        //}
+        public async Task<DepartmentDto?> GetDepartmentByIdAsync(int id)
         {
             return await _dbContext.Departments
                 .Include(d => d.EmployeeCategories)
-                .FirstOrDefaultAsync(d => d.Id == id && d.IsActive == true);
+                .Where(d => d.Id == id && d.IsActive == true)
+                .Select(d => new DepartmentDto
+                {
+                    Id = d.Id,
+                    DepartmentName = d.DepartmentName,
+                    Description = d.Description,
+                    EmployeeCategoriesId = d.EmployeeCategoriesId,
+                    EmployeeCategoriesName = d.EmployeeCategories.CategoryName, // ✅ mapped here
+                    IsActive = d.IsActive
+                })
+                .FirstOrDefaultAsync();
         }
 
         // ✅ Add new department

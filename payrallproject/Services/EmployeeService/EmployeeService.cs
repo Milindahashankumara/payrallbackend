@@ -84,10 +84,65 @@ namespace payrallproject.Services.EmployeeService
             return await Employees.Skip(skipResult).Take(pageSize).ToListAsync();
         }
 
+        public async Task<List<Employe>> GetAllEmployeesHaveLeavesAsync(
+            string? filterOn = null, string? filterQuery = null,
+            string? sortBy = null, bool isAscending = true,
+            int pageNumber = 1, int pageSize = 10)
+        {
+            var employees = _dbContext.Employe
+                .Include(e => e.EmployeeCategories) // include category for filtering
+                .Where(e => e.IsActive == true && e.EmployeeCategories.DaySalarybased == false) // only non-day-salary-based
+                .AsQueryable();
+
+            // Filtering
+            if (!string.IsNullOrWhiteSpace(filterOn) && !string.IsNullOrWhiteSpace(filterQuery))
+            {
+                if (filterOn.Equals("FullName", StringComparison.OrdinalIgnoreCase))
+                {
+                    employees = employees.Where(x => x.FullName.Contains(filterQuery));
+                }
+                else if (filterOn.Equals("Email", StringComparison.OrdinalIgnoreCase))
+                {
+                    employees = employees.Where(x => x.Email != null && x.Email.Contains(filterQuery));
+                }
+            }
+
+            // Sorting
+            if (!string.IsNullOrWhiteSpace(sortBy))
+            {
+                employees = sortBy.ToLower() switch
+                {
+                    "id" => isAscending ? employees.OrderBy(x => x.Id) : employees.OrderByDescending(x => x.Id),
+                    "fullname" => isAscending ? employees.OrderBy(x => x.FullName) : employees.OrderByDescending(x => x.FullName),
+                    "email" => isAscending ? employees.OrderBy(x => x.Email) : employees.OrderByDescending(x => x.Email),
+                    _ => employees.OrderBy(x => x.Id)
+                };
+            }
+
+            // Pagination
+            var skipResult = (pageNumber - 1) * pageSize;
+            employees = employees.Skip(skipResult).Take(pageSize);
+
+            return await employees.ToListAsync();
+        }
+
+
         public async Task<Employe?> GetDeletedEmployeByIdAsync(int id)
         {
             var Employe = await _dbContext.Employe.Where(employe => employe.IsActive == false).FirstOrDefaultAsync(x => x.Id == id);
             return Employe;
+        }
+
+        public async Task<Employe?> GetEmployeHaveLeavesByIdAsync(int id)
+        {
+            var selectedEmploye = await _dbContext.Employe
+                .Include(e => e.EmployeeCategories) // load related category
+                .Where(e => e.IsActive == true
+                         && e.Id == id
+                         && e.EmployeeCategories.DaySalarybased == false) // filter by category flag
+                .FirstOrDefaultAsync();
+
+            return selectedEmploye;
         }
 
         public async Task<Employe?> GetEmployeByIdAsync(int id)
