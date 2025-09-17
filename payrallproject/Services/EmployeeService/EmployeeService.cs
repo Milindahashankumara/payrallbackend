@@ -65,7 +65,7 @@ namespace payrallproject.Services.EmployeeService
             string? sortBy = null, bool isAscending = true,
             int pageNumber = 1, int pageSize = 10)
         {
-            var Employees = _dbContext.Employe.Where(asset => asset.IsActive == true).AsQueryable();
+            var Employees = _dbContext.Employe.Where(employe => employe.IsActive == true).AsQueryable();
             if (string.IsNullOrWhiteSpace(filterOn) == false && string.IsNullOrWhiteSpace(filterQuery) == false)
             {
                 if (filterOn.Equals("FullName", StringComparison.OrdinalIgnoreCase))

@@ -26,7 +26,7 @@ namespace payrallproject.Controllers
 
             try
             {
-                var repayment = await _repaymentService.AddRepaymentAsync(loanId, dto.InstallmentAmount, dto.PaymentDate);
+                var repayment = await _repaymentService.AddRepaymentAsync(loanId, dto.InstallmentAmount, dto.PaymentDate, dto.Description);
                 return Ok(repayment);
             }
             catch (ArgumentException ex)
