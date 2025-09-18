@@ -16,6 +16,7 @@ using payrallproject.Services.EmployeeService;
 using payrallproject.Services.LeavesService;
 using payrallproject.Services.LoanRepaymentService;
 using payrallproject.Services.LoanService;
+using payrallproject.Services.NoPayDayService;
 using payrallproject.Services.OTService;
 using payrallproject.Services.RolesService;
 using payrallproject.Services.SalaryReportService;
@@ -45,6 +46,7 @@ builder.Services.AddScoped<ILoanService, LoanService>();
 builder.Services.AddScoped<ISalaryReportService, SalaryReportService>();
 builder.Services.AddScoped<ILoanRepaymentService, LoanRepaymentService>();
 builder.Services.AddScoped<ILeavesService, LeavesService>();
+builder.Services.AddScoped<INoPayDayService, NoPayDayService>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>

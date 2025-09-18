@@ -25,6 +25,7 @@ namespace payrallproject.Data
         public DbSet<Loans> Loans { get; set; }
         public DbSet<LoanRepayment> Loanrepayment { get; set; }
         public DbSet<Leaves> Leaves { get; set; }
+        public DbSet<NoPayDay> NoPayDay { get; set; }
 
 
         //protected override void OnModelCreating(ModelBuilder builder)

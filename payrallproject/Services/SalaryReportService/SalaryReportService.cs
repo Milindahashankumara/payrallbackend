@@ -16,9 +16,25 @@ namespace payrallproject.Services.SalaryReportService
 
         public async Task<SalaryReport> GenerateAndStoreSalaryReportAsync(SalaryReportDto dto)
         {
+            if (dto.FromDate > dto.ToDate)
+            {
+                throw new Exception("FromDate cannot be after ToDate");
+            }
+
             var employee = await _dbContext.Employe
                 .Include(e => e.EmployeeCategories)
                 .FirstOrDefaultAsync(e => e.Id == dto.EmployeeId);
+
+            var department = await _dbContext.Departments
+                .FirstOrDefaultAsync(e => e.Id == dto.EmployeeId);
+
+            var categ = await _dbContext.EmployeeCategories
+                .FirstOrDefaultAsync(e => e.Id == department.EmployeeCategoriesId);
+
+            var ot1rate = await _dbContext.OT
+                .FirstOrDefaultAsync(e => e.Id == 2);
+            var ot2rate = await _dbContext.OT
+                .FirstOrDefaultAsync(e => e.Id == 1);
 
             if (employee == null || employee.EmployeeCategories == null)
                 throw new Exception("Employee or category not found.");
@@ -39,47 +55,48 @@ namespace payrallproject.Services.SalaryReportService
                 LeaveDays = dto.LeaveDays,
                 HalfDays = dto.HalfDays,
                 NoPayDays = dto.NoPayDays,
-                OT1Hours = dto.OT1Hours,
-                OT2Hours = dto.OT2Hours,
-                IsDaySalaryBased = isDaySalaryBased
+                Ot1Hours = dto.Ot1Hours,
+                Ot2Hours = dto.Ot2Hours,
+                IsDaySalaryBased = isDaySalaryBased,
+                FromDate = dto.FromDate,
+                ToDate = dto.ToDate,
             };
+
+            report.EmployeeName = employee.FullName;
+            report.EmployeeNumber = employee.EmployeeNumber;
+            report.DepartmentName = department.DepartmentName;
+            report.CategaryName = categ.CategoryName;
 
             if (isDaySalaryBased)
             {
                 report.Wages = (employee.DaySalary ?? 0) * dto.WorkingDays;
-                report.KPIAllowance = ((employee.KPIrate ?? 0) * dto.WorkingDays) / 30;
-                report.GrossSalary = report.Wages + report.KPIAllowance + dto.Incentives;
+                report.KpiAllowance = ((employee.KpiRate ?? 0) * dto.WorkingDays) / 30;
+                report.GrossSalary = report.Wages + report.KpiAllowance + dto.Incentives;
                 report.TotalDeductions = dto.SalaryAdvances + dto.Loans + dto.OtherDeductions;
                 report.NetSalary = report.GrossSalary + dto.Bonus - report.TotalDeductions;
             }
             else
             {
-                var basic = (employee.BasicSalary ?? 0) + (employee.BRA1 ?? 0) + (employee.BRA2 ?? 0);
+                var basic = (employee.BasicSalary ?? 0) + (employee.Bra1 ?? 0) + (employee.Bra2 ?? 0);
                 report.Wages = basic;
-                report.KPIAllowance = employee.KPIamount ?? 0;
-                report.OT1Payment = basic / 240 * GetOTRate(1) * dto.OT1Hours;
-                report.OT2Payment = basic / 240 * GetOTRate(2) * dto.OT2Hours;
-                report.TotalOTPayment = report.OT1Payment + report.OT2Payment;
+                report.KpiAllowance = employee.KpiAmount ?? 0;
+                report.Ot1Payment = basic / 240 * ot1rate.Rate * dto.Ot1Hours;
+                report.Ot2Payment = basic / 240 * ot2rate.Rate * dto.Ot2Hours;
+                report.TotalOtPayment = report.Ot1Payment + report.Ot2Payment;
                 report.NoPayDays = dto.NoPayDays;
-                report.EPFLiableSalary = basic - (dto.NoPayDays * basic / 30);
-                report.GrossSalary = report.EPFLiableSalary + report.KPIAllowance + dto.Incentives + report.TotalOTPayment;
-                report.EPF1 = report.EPFLiableSalary * 0.08m;
-                report.EPF2 = report.EPFLiableSalary * 0.12m;
-                report.ETF = report.EPFLiableSalary * 0.03m;
-                report.EmployeeContribution = report.EPF2 + report.ETF;
-                report.TotalDeductions = report.EPF1 + dto.SalaryAdvances + dto.Loans + dto.OtherDeductions;
+                report.EpfLiableSalary = basic - (dto.NoPayDays * basic / 30);
+                report.GrossSalary = report.EpfLiableSalary + report.KpiAllowance + dto.Incentives + report.TotalOtPayment;
+                report.Epf1 = report.EpfLiableSalary * 0.08m;
+                report.Epf2 = report.EpfLiableSalary * 0.12m;
+                report.Etf = report.EpfLiableSalary * 0.03m;
+                report.EmployeeContribution = report.Epf2 + report.Etf;
+                report.TotalDeductions = report.Epf1 + dto.SalaryAdvances + dto.Loans + dto.OtherDeductions;
                 report.NetSalary = report.GrossSalary + dto.Bonus - report.TotalDeductions;
             }
 
             _dbContext.SalaryReports.Add(report);
             await _dbContext.SaveChangesAsync();
             return report;
-        }
-
-        private int GetOTRate(int otType)
-        {
-            // You can fetch OT rate from DB if needed, here is a stub:
-            return otType == 1 ? 1 : 2;
         }
 
         public async Task<List<SalaryReport>> GetAllSalaryReportsAsync()
@@ -116,8 +133,8 @@ namespace payrallproject.Services.SalaryReportService
             report.LeaveDays = dto.LeaveDays;
             report.HalfDays = dto.HalfDays;
             report.NoPayDays = dto.NoPayDays;
-            report.OT1Hours = dto.OT1Hours;
-            report.OT2Hours = dto.OT2Hours;
+            report.Ot1Hours = dto.Ot1Hours;
+            report.Ot2Hours = dto.Ot2Hours;
 
             // Recalculate salary fields as needed (reuse your calculation logic here)
             // Example:

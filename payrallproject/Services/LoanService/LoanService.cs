@@ -161,5 +161,12 @@ namespace payrallproject.Services.LoanService
 
             return loan;
         }
+        public async Task<Loans?> GetActiveLoanByEmployeeIdAsync(int employeeId)
+        {
+            return await _dbContext.Loans
+                .Where(l => l.EmployeID == employeeId && l.IsActive && !l.Settled)
+                .OrderByDescending(l => l.StartDate) // if multiple, get latest
+                .FirstOrDefaultAsync();
+        }
     }
 }

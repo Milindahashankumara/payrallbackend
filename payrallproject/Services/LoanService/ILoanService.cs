@@ -20,5 +20,6 @@ namespace payrallproject.Services.LoanService
             int pageNumber = 1, int pageSize = 10);
         Task<Loans?> GetDeletedLoansByIdAsync(int id);
         Task<Loans?> RecoverDeletedLoansAsync(int id);
+        Task<Loans?> GetActiveLoanByEmployeeIdAsync(int employeeId);
     }
 }

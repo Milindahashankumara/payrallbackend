@@ -89,5 +89,13 @@ namespace payrallproject.Controllers
             if (recovered == null) return NotFound();
             return Ok(recovered);
         }
+
+        [HttpGet("active/{employeeId}")]
+        public async Task<ActionResult<Loans>> GetActiveLoanForEmployee(int employeeId)
+        {
+            var loan = await _loanService.GetActiveLoanByEmployeeIdAsync(employeeId);
+            if (loan == null) return NotFound();
+            return Ok(loan);
+        }
     }
 }

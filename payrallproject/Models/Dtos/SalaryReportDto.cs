@@ -14,7 +14,9 @@
         public int LeaveDays { get; set; }
         public int HalfDays { get; set; }
         public int NoPayDays { get; set; }
-        public decimal OT1Hours { get; set; }
-        public decimal OT2Hours { get; set; }
+        public decimal Ot1Hours { get; set; }
+        public decimal Ot2Hours { get; set; }
+        public DateTime FromDate { get; set; }
+        public DateTime ToDate { get; set; }
     }
 }

@@ -23,15 +23,15 @@ namespace payrallproject.Models.Domains
         public EmployeeCategories EmployeeCategories { get; set; }
         public int? BasicSalary { get; set; }
         public int? DaySalary { get; set; }
-        public int? KPIrate { get; set; }
-        public int? KPIamount { get; set; }
-        public int? BRA1 { get; set; }
-        public int? BRA2 { get; set; }
-        public bool IsActive { get; set; } = true;
-        public string BankAccountNumber { get; set; }
-        public string BankName { get; set; }
-        public string BankBranch { get; set; }
-        public string TaxIdentificationNumber { get; set; }
-        public bool HasTaxExemption { get; set; }
+        public int? KpiRate { get; set; }
+        public int? KpiAmount { get; set; }
+        public int? Bra1 { get; set; }
+        public int? Bra2 { get; set; }
+        public bool? IsActive { get; set; } = true;
+        public string? BankAccountNumber { get; set; }
+        public string? BankName { get; set; }
+        public string? BankBranch { get; set; }
+        public string? TaxIdentificationNumber { get; set; }
+        public bool? HasTaxExemption { get; set; }
     }
 }

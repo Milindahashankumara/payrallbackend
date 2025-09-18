@@ -12,6 +12,10 @@ namespace payrallproject.Models.Domains
         public Employe Employee { get; set; }
         public int Year { get; set; }
         public int Month { get; set; }
+        public string EmployeeName { get; set; }
+        public string EmployeeNumber { get; set; }
+        public string CategaryName { get; set; }
+        public string DepartmentName { get; set; }
 
         // Input fields
         public int WorkingDays { get; set; }
@@ -23,22 +27,24 @@ namespace payrallproject.Models.Domains
         public int LeaveDays { get; set; }
         public int HalfDays { get; set; }
         public int NoPayDays { get; set; }
-        public decimal OT1Hours { get; set; }
-        public decimal OT2Hours { get; set; }
+        public decimal Ot1Hours { get; set; }
+        public decimal Ot2Hours { get; set; }
+        public DateTime FromDate { get; set; }
+        public DateTime ToDate { get; set; }
 
         // Calculated fields
         public decimal Wages { get; set; }
-        public decimal KPIAllowance { get; set; }
-        public decimal GrossSalary { get; set; }
+        public decimal KpiAllowance { get; set; }
+        public decimal? GrossSalary { get; set; }
         public decimal TotalDeductions { get; set; }
-        public decimal NetSalary { get; set; }
-        public decimal EPFLiableSalary { get; set; }
-        public decimal OT1Payment { get; set; }
-        public decimal OT2Payment { get; set; }
-        public decimal TotalOTPayment { get; set; }
-        public decimal EPF1 { get; set; }
-        public decimal EPF2 { get; set; }
-        public decimal ETF { get; set; }
+        public decimal? NetSalary { get; set; }
+        public decimal EpfLiableSalary { get; set; }
+        public decimal? Ot1Payment { get; set; }
+        public decimal? Ot2Payment { get; set; }
+        public decimal? TotalOtPayment { get; set; }
+        public decimal Epf1 { get; set; }
+        public decimal Epf2 { get; set; }
+        public decimal Etf { get; set; }
         public decimal EmployeeContribution { get; set; }
         public bool IsDaySalaryBased { get; set; }
         public DateTime GeneratedOn { get; set; } = DateTime.UtcNow;

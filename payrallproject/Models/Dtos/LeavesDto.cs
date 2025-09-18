@@ -11,7 +11,6 @@ namespace payrallproject.Models.Dtos
 
         [Required]
         public int Year { get; set; }
-
         public double AnnualLeavesAllocated { get; set; }
         public double AnnualLeavesUsed { get; set; }
 
