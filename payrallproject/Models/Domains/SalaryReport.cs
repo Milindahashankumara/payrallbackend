@@ -48,5 +48,10 @@ namespace payrallproject.Models.Domains
         public decimal EmployeeContribution { get; set; }
         public bool IsDaySalaryBased { get; set; }
         public DateTime GeneratedOn { get; set; } = DateTime.UtcNow;
+        public int? DaySalary { get; set; }
+        public int? KpiRate { get; set; }
+        public int? BasicStationarySal { get; set; }
+        public int? basicSala { get; set; }
+        public decimal NoPay { get; set; }
     }
 }

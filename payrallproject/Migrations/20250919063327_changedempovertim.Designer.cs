@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using payrallproject.Data;
 
@@ -11,9 +12,11 @@ using payrallproject.Data;
 namespace payrallproject.Migrations
 {
     [DbContext(typeof(AuthDbContext))]
-    partial class AuthDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250919063327_changedempovertim")]
+    partial class changedempovertim
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -167,9 +170,6 @@ namespace payrallproject.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<decimal?>("Amount")
-                        .HasColumnType("decimal(18,2)");
-
                     b.Property<DateTime?>("DateWorked")
                         .HasColumnType("datetime2");
 
@@ -182,9 +182,6 @@ namespace payrallproject.Migrations
                     b.Property<int?>("OtId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Remarks")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("EmployeId");
@@ -192,46 +189,6 @@ namespace payrallproject.Migrations
                     b.HasIndex("OtId");
 
                     b.ToTable("EmployeeOvertimes");
-                });
-
-            modelBuilder.Entity("payrallproject.Models.Domains.Holiday", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("HolidayType")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<bool>("IsRecurring")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Holiday");
                 });
 
             modelBuilder.Entity("payrallproject.Models.Domains.Leaves", b =>
@@ -450,18 +407,12 @@ namespace payrallproject.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("BasicStationarySal")
-                        .HasColumnType("int");
-
                     b.Property<decimal>("Bonus")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("CategaryName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("DaySalary")
-                        .HasColumnType("int");
 
                     b.Property<string>("DepartmentName")
                         .IsRequired()
@@ -514,9 +465,6 @@ namespace payrallproject.Migrations
                     b.Property<decimal>("KpiAllowance")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int?>("KpiRate")
-                        .HasColumnType("int");
-
                     b.Property<int>("LeaveDays")
                         .HasColumnType("int");
 
@@ -527,9 +475,6 @@ namespace payrallproject.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal?>("NetSalary")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("NoPay")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("NoPayDays")
@@ -569,9 +514,6 @@ namespace payrallproject.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("Year")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("basicSala")
                         .HasColumnType("int");
 
                     b.HasKey("Id");

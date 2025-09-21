@@ -26,6 +26,7 @@ namespace payrallproject.Data
         public DbSet<LoanRepayment> Loanrepayment { get; set; }
         public DbSet<Leaves> Leaves { get; set; }
         public DbSet<NoPayDay> NoPayDay { get; set; }
+        public DbSet<Holiday> Holiday { get; set; }
 
 
         //protected override void OnModelCreating(ModelBuilder builder)

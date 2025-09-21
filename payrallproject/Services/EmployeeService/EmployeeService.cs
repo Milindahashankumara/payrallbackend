@@ -34,6 +34,7 @@ namespace payrallproject.Services.EmployeeService
             {
                 return null;
             }
+            SelectedEmploye.TerminationDate = DateTime.Now;
             SelectedEmploye.IsActive = false;
             await _dbContext.SaveChangesAsync();
             return SelectedEmploye;

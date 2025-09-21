@@ -18,5 +18,10 @@
         public decimal Ot2Hours { get; set; }
         public DateTime FromDate { get; set; }
         public DateTime ToDate { get; set; }
+        public int? DaySalary { get; set; }
+        public int? KpiRate { get; set; }
+        public int? BasicStationarySal { get; set; }
+        public int? basicSala { get; set; }
+        public decimal NoPay { get; set; }
     }
 }

@@ -26,7 +26,7 @@ namespace payrallproject.Services.SalaryReportService
                 .FirstOrDefaultAsync(e => e.Id == dto.EmployeeId);
 
             var department = await _dbContext.Departments
-                .FirstOrDefaultAsync(e => e.Id == dto.EmployeeId);
+                .FirstOrDefaultAsync(e => e.Id == employee.DepartmentID);
 
             var categ = await _dbContext.EmployeeCategories
                 .FirstOrDefaultAsync(e => e.Id == department.EmployeeCategoriesId);
@@ -69,6 +69,8 @@ namespace payrallproject.Services.SalaryReportService
 
             if (isDaySalaryBased)
             {
+                report.DaySalary = employee.DaySalary;
+                report.KpiRate = employee.KpiRate;
                 report.Wages = (employee.DaySalary ?? 0) * dto.WorkingDays;
                 report.KpiAllowance = ((employee.KpiRate ?? 0) * dto.WorkingDays) / 30;
                 report.GrossSalary = report.Wages + report.KpiAllowance + dto.Incentives;
@@ -78,13 +80,16 @@ namespace payrallproject.Services.SalaryReportService
             else
             {
                 var basic = (employee.BasicSalary ?? 0) + (employee.Bra1 ?? 0) + (employee.Bra2 ?? 0);
+                report.BasicStationarySal = employee.BasicSalary ?? 0;
+                report.basicSala = basic;
                 report.Wages = basic;
                 report.KpiAllowance = employee.KpiAmount ?? 0;
                 report.Ot1Payment = basic / 240 * ot1rate.Rate * dto.Ot1Hours;
                 report.Ot2Payment = basic / 240 * ot2rate.Rate * dto.Ot2Hours;
                 report.TotalOtPayment = report.Ot1Payment + report.Ot2Payment;
                 report.NoPayDays = dto.NoPayDays;
-                report.EpfLiableSalary = basic - (dto.NoPayDays * basic / 30);
+                report.NoPay = dto.NoPayDays * basic / 30;
+                report.EpfLiableSalary = basic - report.NoPay;
                 report.GrossSalary = report.EpfLiableSalary + report.KpiAllowance + dto.Incentives + report.TotalOtPayment;
                 report.Epf1 = report.EpfLiableSalary * 0.08m;
                 report.Epf2 = report.EpfLiableSalary * 0.12m;
