@@ -53,5 +53,7 @@ namespace payrallproject.Models.Domains
         public int? BasicStationarySal { get; set; }
         public int? basicSala { get; set; }
         public decimal NoPay { get; set; }
+        public int? Bra1 { get; set; }
+        public int? Bra2 { get; set; }
     }
 }

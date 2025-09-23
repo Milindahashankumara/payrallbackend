@@ -138,6 +138,23 @@ namespace payrallproject.Controllers
             }
         }
 
+        [HttpGet("countnonweekend")]
+        public async Task<ActionResult<int>> GetNonWeekendHolidayCount([FromQuery] DateTime startDate, [FromQuery] DateTime endDate)
+        {
+            try
+            {
+                if (startDate > endDate)
+                    return BadRequest(new { message = "Start date cannot be after end date." });
+
+                var count = await _holidayService.GetNonWeekendHolidayCountAsync(startDate, endDate);
+                return Ok(count);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "An error occurred while counting holidays.", error = ex.Message });
+            }
+        }
+
         [HttpGet("year/{year}")]
         public async Task<ActionResult<List<HolidayDto>>> GetHolidaysByYear(int year)
         {

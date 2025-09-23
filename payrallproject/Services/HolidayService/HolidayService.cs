@@ -99,6 +99,18 @@ namespace payrallproject.Services.HolidayService
                 .CountAsync();
         }
 
+        public async Task<int> GetNonWeekendHolidayCountAsync(DateTime startDate, DateTime endDate)
+        {
+            var holidays = await _context.Holiday
+                .Where(h => h.Date >= startDate && h.Date <= endDate)
+                .ToListAsync();
+
+            // Exclude Saturdays (DayOfWeek == 6) and Sundays (DayOfWeek == 0)
+            int count = holidays.Count(h => h.Date.DayOfWeek != DayOfWeek.Saturday && h.Date.DayOfWeek != DayOfWeek.Sunday);
+
+            return count;
+        }
+
         public async Task<List<HolidayDto>> GetHolidaysByYearAsync(int year)
         {
             var startDate = new DateTime(year, 1, 1);

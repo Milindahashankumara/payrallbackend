@@ -16,5 +16,6 @@ namespace payrallproject.Services.HolidayService
         Task<List<HolidayDto>> GetHolidaysByDateRangeAsync(DateTime startDate, DateTime endDate);
         Task<int> GetHolidaysCountAsync(DateTime startDate, DateTime endDate);
         Task<List<HolidayDto>> GetHolidaysByYearAsync(int year);
+        Task<int> GetNonWeekendHolidayCountAsync(DateTime startDate, DateTime endDate);
     }
 }

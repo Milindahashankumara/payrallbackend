@@ -80,9 +80,11 @@ namespace payrallproject.Services.SalaryReportService
             else
             {
                 var basic = (employee.BasicSalary ?? 0) + (employee.Bra1 ?? 0) + (employee.Bra2 ?? 0);
-                report.BasicStationarySal = employee.BasicSalary ?? 0;
+                report.BasicStationarySal = employee.BasicSalary;
                 report.basicSala = basic;
                 report.Wages = basic;
+                report.Bra1 = employee.Bra1;
+                report.Bra2 = employee.Bra2;
                 report.KpiAllowance = employee.KpiAmount ?? 0;
                 report.Ot1Payment = basic / 240 * ot1rate.Rate * dto.Ot1Hours;
                 report.Ot2Payment = basic / 240 * ot2rate.Rate * dto.Ot2Hours;
