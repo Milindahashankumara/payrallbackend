@@ -44,7 +44,13 @@ namespace payrallproject.Services.LeavesService
 
             var joinedDate = employee.JoinedDate.Value;
             var annualLeaves = CalculateAnnualLeaves(joinedDate, year);
+
+            var yearsOfService = year - joinedDate.Year;
             var casualLeaves = 7.0; // Always 7 casual leaves
+            if (yearsOfService < 0)
+            {
+                casualLeaves = 0;
+            }
 
             var leaves = new Leaves
             {
@@ -76,6 +82,11 @@ namespace payrallproject.Services.LeavesService
             {
                 return CalculateSecondYearLeaves(joinedDate);
             }
+            // minus years:
+            else if (yearsOfService < 0)
+            {
+                return 0;
+            }
             // THIRD YEAR ONWARDS: Always 14 annual leaves
             else
             {
@@ -102,11 +113,11 @@ namespace payrallproject.Services.LeavesService
             return (month - 1) / 3 + 1;
         }
 
-        public async Task<LeaveBalanceDto> GetLeaveBalanceAsync(int employeID, int year)
+        public async Task<LeaveBalanceDto1> GetLeaveBalanceAsync(int employeID, int year)
         {
             var leaves = await GetOrCreateLeavesRecordAsync(employeID, year);
 
-            return new LeaveBalanceDto
+            return new LeaveBalanceDto1
             {
                 EmployeID = employeID,
                 Year = year,

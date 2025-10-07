@@ -59,9 +59,9 @@ namespace payrallproject.Controllers
         }
         [HttpDelete]
         [Route("{id:int}")]
-        public async Task<IActionResult> DeleteEmployee([FromRoute] int id)
+        public async Task<IActionResult> DeleteEmployee([FromRoute] int id, [FromBody] TerminationRequest request)
         {
-            var SelectedEmployee = await _employeeService.DeleteEmployeAsync(id);
+            var SelectedEmployee = await _employeeService.DeleteEmployeAsync(id, request.TerminationDate);
             if (SelectedEmployee == null)
             {
                 return NotFound();

@@ -43,7 +43,7 @@ namespace payrallproject.Models.Dtos
         public string LeaveType { get; set; } // "Annual" or "Casual"
     }
 
-    public class LeaveBalanceDto
+    public class LeaveBalanceDto1
     {
         public int EmployeID { get; set; }
         public int Year { get; set; }

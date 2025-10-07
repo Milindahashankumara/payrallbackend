@@ -15,6 +15,7 @@ using payrallproject.Services.EmployeeCategoriesService;
 using payrallproject.Services.EmployeeService;
 using payrallproject.Services.EmpOvertimeService;
 using payrallproject.Services.HolidayService;
+using payrallproject.Services.Leaves2Service;
 using payrallproject.Services.LeavesService;
 using payrallproject.Services.LoanRepaymentService;
 using payrallproject.Services.LoanService;
@@ -51,6 +52,7 @@ builder.Services.AddScoped<ILeavesService, LeavesService>();
 builder.Services.AddScoped<INoPayDayService, NoPayDayService>();
 builder.Services.AddScoped<IEmpOvertimeService, EmpOvertimeService>();
 builder.Services.AddScoped<IHolidayService, HolidayService>();
+builder.Services.AddScoped<ILeaves2Service, Leaves2Service>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>

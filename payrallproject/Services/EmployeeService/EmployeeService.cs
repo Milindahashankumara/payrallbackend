@@ -27,20 +27,20 @@ namespace payrallproject.Services.EmployeeService
             return NewEmploye;
         }
 
-        public async Task<Employe?> DeleteEmployeAsync(int id)
+        public async Task<Employe?> DeleteEmployeAsync(int id, DateTime terminationDate)
         {
             var SelectedEmploye = await _dbContext.Employe.Where(employe => employe.IsActive == true).FirstOrDefaultAsync(x => x.Id == id);
             if (SelectedEmploye == null)
             {
                 return null;
             }
-            SelectedEmploye.TerminationDate = DateTime.Now;
+            SelectedEmploye.TerminationDate = terminationDate;
             SelectedEmploye.IsActive = false;
             await _dbContext.SaveChangesAsync();
             return SelectedEmploye;
         }
 
-        public async Task<List<Employe>> GetAllDeletedEmployesAsync(string? filterOn = null, string? filterQuery = null, string? sortBy = null, bool isAscending = true, int pageNumber = 1, int pageSize = 10)
+        public async Task<List<Employe>> GetAllDeletedEmployesAsync(string? filterOn = null, string? filterQuery = null, string? sortBy = null, bool isAscending = true, int pageNumber = 1, int pageSize = 20)
         {
             var Employes = _dbContext.Employe.Where(employe => employe.IsActive == false).AsQueryable();
             if (string.IsNullOrWhiteSpace(filterOn) == false && string.IsNullOrWhiteSpace(filterQuery) == false)
@@ -64,7 +64,7 @@ namespace payrallproject.Services.EmployeeService
         public async Task<List<Employe>> GetAllEmployeesAsync(
             string? filterOn = null, string? filterQuery = null,
             string? sortBy = null, bool isAscending = true,
-            int pageNumber = 1, int pageSize = 10)
+            int pageNumber = 1, int pageSize = 20)
         {
             var Employees = _dbContext.Employe.Where(employe => employe.IsActive == true).AsQueryable();
             if (string.IsNullOrWhiteSpace(filterOn) == false && string.IsNullOrWhiteSpace(filterQuery) == false)
@@ -88,7 +88,7 @@ namespace payrallproject.Services.EmployeeService
         public async Task<List<Employe>> GetAllEmployeesHaveLeavesAsync(
             string? filterOn = null, string? filterQuery = null,
             string? sortBy = null, bool isAscending = true,
-            int pageNumber = 1, int pageSize = 10)
+            int pageNumber = 1, int pageSize = 1000)
         {
             var employees = _dbContext.Employe
                 .Include(e => e.EmployeeCategories) // include category for filtering

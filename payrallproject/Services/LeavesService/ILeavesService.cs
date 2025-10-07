@@ -6,7 +6,7 @@ namespace payrallproject.Services.LeavesService
     public interface ILeavesService
     {
         Task<Leaves> GetOrCreateLeavesRecordAsync(int employeID, int year);
-        Task<LeaveBalanceDto> GetLeaveBalanceAsync(int employeID, int year);
+        Task<LeaveBalanceDto1> GetLeaveBalanceAsync(int employeID, int year);
         Task<Leaves> ApplyLeaveAsync(LeaveRequestDto leaveRequest);
         Task<List<Leaves>> GetEmployeeLeavesHistoryAsync(int employeID);
         Task<List<Leaves>> GetAllLeavesAsync(int year);

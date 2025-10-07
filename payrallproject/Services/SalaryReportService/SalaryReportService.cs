@@ -92,13 +92,13 @@ namespace payrallproject.Services.SalaryReportService
                 report.NoPayDays = dto.NoPayDays;
                 report.NoPay = dto.NoPayDays * basic / 30;
                 report.EpfLiableSalary = basic - report.NoPay;
-                report.GrossSalary = report.EpfLiableSalary + report.KpiAllowance + dto.Incentives + report.TotalOtPayment;
+                report.GrossSalary = report.EpfLiableSalary + report.KpiAllowance + dto.Bonus + dto.Incentives + report.TotalOtPayment;
                 report.Epf1 = report.EpfLiableSalary * 0.08m;
                 report.Epf2 = report.EpfLiableSalary * 0.12m;
                 report.Etf = report.EpfLiableSalary * 0.03m;
                 report.EmployeeContribution = report.Epf2 + report.Etf;
                 report.TotalDeductions = report.Epf1 + dto.SalaryAdvances + dto.Loans + dto.OtherDeductions;
-                report.NetSalary = report.GrossSalary + dto.Bonus - report.TotalDeductions;
+                report.NetSalary = report.GrossSalary - report.TotalDeductions;
             }
 
             _dbContext.SalaryReports.Add(report);
