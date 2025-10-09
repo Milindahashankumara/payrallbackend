@@ -72,25 +72,35 @@ namespace payrallproject.Services.SalaryReportService
                 report.DaySalary = employee.DaySalary;
                 report.KpiRate = employee.KpiRate;
                 report.Wages = (employee.DaySalary ?? 0) * dto.WorkingDays;
-                report.KpiAllowance = ((employee.KpiRate ?? 0) * dto.WorkingDays) / 30;
-                report.GrossSalary = report.Wages + report.KpiAllowance + dto.Incentives;
+
+                decimal kr = employee.KpiRate ?? 0;
+                decimal wd = dto.WorkingDays;
+                //report.KpiAllowance = ((kr) * wd) / 30;
+                report.KpiAllowance = Math.Round((kr * wd) / 30m, 2);
+
+                report.GrossSalary = report.Wages + report.KpiAllowance + dto.Incentives + dto.Bonus;
                 report.TotalDeductions = dto.SalaryAdvances + dto.Loans + dto.OtherDeductions;
-                report.NetSalary = report.GrossSalary + dto.Bonus - report.TotalDeductions;
+                report.NetSalary = report.GrossSalary - report.TotalDeductions;
             }
             else
             {
                 var basic = (employee.BasicSalary ?? 0) + (employee.Bra1 ?? 0) + (employee.Bra2 ?? 0);
+                decimal bas = basic;
+
                 report.BasicStationarySal = employee.BasicSalary;
                 report.basicSala = basic;
                 report.Wages = basic;
                 report.Bra1 = employee.Bra1;
                 report.Bra2 = employee.Bra2;
                 report.KpiAllowance = employee.KpiAmount ?? 0;
-                report.Ot1Payment = basic / 240 * ot1rate.Rate * dto.Ot1Hours;
-                report.Ot2Payment = basic / 240 * ot2rate.Rate * dto.Ot2Hours;
+                report.Ot1Payment = bas / 240 * ot1rate.Rate * dto.Ot1Hours;
+                report.Ot2Payment = bas / 240 * ot2rate.Rate * dto.Ot2Hours;
                 report.TotalOtPayment = report.Ot1Payment + report.Ot2Payment;
                 report.NoPayDays = dto.NoPayDays;
-                report.NoPay = dto.NoPayDays * basic / 30;
+
+                //report.NoPay = dto.NoPayDays * basic / 30;
+                report.NoPay = Math.Round((decimal)(dto.NoPayDays * bas / 30), 2);
+
                 report.EpfLiableSalary = basic - report.NoPay;
                 report.GrossSalary = report.EpfLiableSalary + report.KpiAllowance + dto.Bonus + dto.Incentives + report.TotalOtPayment;
                 report.Epf1 = report.EpfLiableSalary * 0.08m;
