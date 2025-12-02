@@ -17,6 +17,20 @@ namespace payrallproject.Data
         public DbSet<Roles> Roles { get; set; }
         public DbSet<UserRoles> UserRoles { get; set; }
         public DbSet<PasswordResetTokens> PasswordResetTokens { get; set; }
+        public DbSet<OT> OT { get; set; }
+        public DbSet<EmployeeCategories> EmployeeCategories { get; set; }
+        public DbSet<Department> Departments { get; set; }
+        public DbSet<EmployeeOvertime> EmployeeOvertimes { get; set; }
+        public DbSet<SalaryReport> SalaryReports { get; set; }
+        public DbSet<Loans> Loans { get; set; }
+        public DbSet<LoanRepayment> Loanrepayment { get; set; }
+        public DbSet<Leaves> Leaves { get; set; }
+        public DbSet<NoPayDay> NoPayDay { get; set; }
+        public DbSet<Holiday> Holiday { get; set; }
+        public DbSet<Leaves2> Leaves2 { get; set; }
+        public DbSet<NoPayEntry> NoPayEntries { get; set; }
+        public DbSet<LeaveBalance> LeaveBalances { get; set; }
+
 
         //protected override void OnModelCreating(ModelBuilder builder)
         //{

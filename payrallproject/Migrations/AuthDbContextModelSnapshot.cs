@@ -22,6 +22,34 @@ namespace payrallproject.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("payrallproject.Models.Domains.Department", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("DepartmentName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("EmployeeCategoriesId")
+                        .HasColumnType("int");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmployeeCategoriesId");
+
+                    b.ToTable("Departments");
+                });
+
             modelBuilder.Entity("payrallproject.Models.Domains.Employe", b =>
                 {
                     b.Property<int>("Id")
@@ -33,14 +61,56 @@ namespace payrallproject.Migrations
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("BankAccountNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BankBranch")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BankName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("BasicSalary")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Bra1")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Bra2")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("DaySalary")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("DepartmentID")
+                        .HasColumnType("int");
+
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("FirstName")
+                    b.Property<int?>("EmployeeCategoriesID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("EmployeeNumber")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("LastName")
+                    b.Property<string>("FullName")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("HasTaxExemption")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("JoinedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("KpiAmount")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("KpiRate")
+                        .HasColumnType("int");
 
                     b.Property<string>("Nic")
                         .HasColumnType("nvarchar(max)");
@@ -48,9 +118,407 @@ namespace payrallproject.Migrations
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("TaxIdentificationNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("TerminationDate")
+                        .HasColumnType("datetime2");
+
                     b.HasKey("Id");
 
+                    b.HasIndex("DepartmentID");
+
+                    b.HasIndex("EmployeeCategoriesID");
+
                     b.ToTable("Employe");
+                });
+
+            modelBuilder.Entity("payrallproject.Models.Domains.EmployeeCategories", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CategoryName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("DaySalarybased")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("EmployeeCategories");
+                });
+
+            modelBuilder.Entity("payrallproject.Models.Domains.EmployeeOvertime", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal?>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime?>("DateWorked")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("EmployeId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("HoursWorked")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("OtId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Remarks")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmployeId");
+
+                    b.HasIndex("OtId");
+
+                    b.ToTable("EmployeeOvertimes");
+                });
+
+            modelBuilder.Entity("payrallproject.Models.Domains.Holiday", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("HolidayType")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<bool>("IsRecurring")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Holiday");
+                });
+
+            modelBuilder.Entity("payrallproject.Models.Domains.LeaveBalance", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal>("BalanceDays")
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("EmployeeId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("EntitledDays")
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<string>("LeaveType")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("UsedDays")
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<int>("Year")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.ToTable("LeaveBalances");
+                });
+
+            modelBuilder.Entity("payrallproject.Models.Domains.Leaves", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<double>("AnnualLeavesAllocated")
+                        .HasColumnType("float");
+
+                    b.Property<double>("AnnualLeavesUsed")
+                        .HasColumnType("float");
+
+                    b.Property<double>("CasualLeavesAllocated")
+                        .HasColumnType("float");
+
+                    b.Property<double>("CasualLeavesUsed")
+                        .HasColumnType("float");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("EmployeID")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Year")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmployeID");
+
+                    b.ToTable("Leaves");
+                });
+
+            modelBuilder.Entity("payrallproject.Models.Domains.Leaves2", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("EmployeeId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool?>("IsFirstHalfDay")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsHalfDay")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LeaveType")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<decimal>("NumberOfDays")
+                        .HasColumnType("decimal(3,1)");
+
+                    b.Property<string>("Reason")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Year")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.ToTable("Leaves2");
+                });
+
+            modelBuilder.Entity("payrallproject.Models.Domains.LoanRepayment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("InstallmentAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int?>("LoanId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MonthNo")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("PaymentDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("RemainingBalance")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LoanId");
+
+                    b.ToTable("Loanrepayment");
+                });
+
+            modelBuilder.Entity("payrallproject.Models.Domains.Loans", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("EmployeID")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal>("MonthlyInstallment")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("PrincipalAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("RemainingBalance")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<bool>("Settled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("TermMonths")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmployeID");
+
+                    b.ToTable("Loans");
+                });
+
+            modelBuilder.Entity("payrallproject.Models.Domains.NoPayDay", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("EmployeID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Reason")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmployeID");
+
+                    b.ToTable("NoPayDay");
+                });
+
+            modelBuilder.Entity("payrallproject.Models.Domains.NoPayEntry", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("EmployeeId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("NoPayDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Reason")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.ToTable("NoPayEntries");
+                });
+
+            modelBuilder.Entity("payrallproject.Models.Domains.OT", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal?>("Rate")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("OT");
                 });
 
             modelBuilder.Entity("payrallproject.Models.Domains.PasswordResetTokens", b =>
@@ -97,6 +565,166 @@ namespace payrallproject.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Roles");
+                });
+
+            modelBuilder.Entity("payrallproject.Models.Domains.SalaryReport", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal>("AttendanceAllowance")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int?>("BasicStationarySal")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Bonus")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int?>("Bra1")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Bra2")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CategaryName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("DaySalary")
+                        .HasColumnType("int");
+
+                    b.Property<string>("DepartmentName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("EmployeeContribution")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("EmployeeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("EmployeeName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EmployeeNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Epf1")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Epf2")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("EpfLiableSalary")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Etf")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("FoodAllowance")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("FromDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("GeneratedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal?>("GrossSalary")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("HalfDays")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Incentives")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("InternetAllowance")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<bool>("IsDaySalaryBased")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal>("KpiAllowance")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int?>("KpiRate")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LeaveDays")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Loans")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("MedicalAllowance")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("Month")
+                        .HasColumnType("int");
+
+                    b.Property<decimal?>("NetSalary")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("NoPay")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("NoPayDays")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Ot1Hours")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal?>("Ot1Payment")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Ot2Hours")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal?>("Ot2Payment")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("OtherDeductions")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("SalaryAdvances")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("ToDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("TotalDeductions")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal?>("TotalOtPayment")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("TransportAllowance")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Wages")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("WorkingDays")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Year")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("basicSala")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.ToTable("SalaryReports");
                 });
 
             modelBuilder.Entity("payrallproject.Models.Domains.User", b =>
@@ -159,6 +787,118 @@ namespace payrallproject.Migrations
                     b.ToTable("UserRoles");
                 });
 
+            modelBuilder.Entity("payrallproject.Models.Domains.Department", b =>
+                {
+                    b.HasOne("payrallproject.Models.Domains.EmployeeCategories", "EmployeeCategories")
+                        .WithMany()
+                        .HasForeignKey("EmployeeCategoriesId");
+
+                    b.Navigation("EmployeeCategories");
+                });
+
+            modelBuilder.Entity("payrallproject.Models.Domains.Employe", b =>
+                {
+                    b.HasOne("payrallproject.Models.Domains.Department", "Department")
+                        .WithMany()
+                        .HasForeignKey("DepartmentID");
+
+                    b.HasOne("payrallproject.Models.Domains.EmployeeCategories", "EmployeeCategories")
+                        .WithMany()
+                        .HasForeignKey("EmployeeCategoriesID");
+
+                    b.Navigation("Department");
+
+                    b.Navigation("EmployeeCategories");
+                });
+
+            modelBuilder.Entity("payrallproject.Models.Domains.EmployeeOvertime", b =>
+                {
+                    b.HasOne("payrallproject.Models.Domains.Employe", "Employe")
+                        .WithMany()
+                        .HasForeignKey("EmployeId");
+
+                    b.HasOne("payrallproject.Models.Domains.OT", "OT")
+                        .WithMany()
+                        .HasForeignKey("OtId");
+
+                    b.Navigation("Employe");
+
+                    b.Navigation("OT");
+                });
+
+            modelBuilder.Entity("payrallproject.Models.Domains.LeaveBalance", b =>
+                {
+                    b.HasOne("payrallproject.Models.Domains.Employe", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
+                });
+
+            modelBuilder.Entity("payrallproject.Models.Domains.Leaves", b =>
+                {
+                    b.HasOne("payrallproject.Models.Domains.Employe", "Employe")
+                        .WithMany()
+                        .HasForeignKey("EmployeID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Employe");
+                });
+
+            modelBuilder.Entity("payrallproject.Models.Domains.Leaves2", b =>
+                {
+                    b.HasOne("payrallproject.Models.Domains.Employe", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
+                });
+
+            modelBuilder.Entity("payrallproject.Models.Domains.LoanRepayment", b =>
+                {
+                    b.HasOne("payrallproject.Models.Domains.Loans", "Loans")
+                        .WithMany()
+                        .HasForeignKey("LoanId");
+
+                    b.Navigation("Loans");
+                });
+
+            modelBuilder.Entity("payrallproject.Models.Domains.Loans", b =>
+                {
+                    b.HasOne("payrallproject.Models.Domains.Employe", "Employe")
+                        .WithMany()
+                        .HasForeignKey("EmployeID");
+
+                    b.Navigation("Employe");
+                });
+
+            modelBuilder.Entity("payrallproject.Models.Domains.NoPayDay", b =>
+                {
+                    b.HasOne("payrallproject.Models.Domains.Employe", "Employe")
+                        .WithMany()
+                        .HasForeignKey("EmployeID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Employe");
+                });
+
+            modelBuilder.Entity("payrallproject.Models.Domains.NoPayEntry", b =>
+                {
+                    b.HasOne("payrallproject.Models.Domains.Employe", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
+                });
+
             modelBuilder.Entity("payrallproject.Models.Domains.PasswordResetTokens", b =>
                 {
                     b.HasOne("payrallproject.Models.Domains.User", "User")
@@ -166,6 +906,17 @@ namespace payrallproject.Migrations
                         .HasForeignKey("UserId");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("payrallproject.Models.Domains.SalaryReport", b =>
+                {
+                    b.HasOne("payrallproject.Models.Domains.Employe", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
                 });
 
             modelBuilder.Entity("payrallproject.Models.Domains.UserRoles", b =>

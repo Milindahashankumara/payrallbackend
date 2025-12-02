@@ -1,15 +1,28 @@
-using Microsoft.Extensions.DependencyInjection;
-using payrallproject.Mappings;
-using payrallproject.Models.Helpter;
 using AutoMapper;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using payrallproject.Data;
-using payrallproject.Services.EmailServices;
-using payrallproject.Services.AuthService;
+using payrallproject.Mappings;
 using payrallproject.Models.Domains;
+using payrallproject.Models.Helpter;
+using payrallproject.Services.AuthService;
+using payrallproject.Services.DepartmentService;
+using payrallproject.Services.EmailServices;
+using payrallproject.Services.EmployeeCategoriesService;
+using payrallproject.Services.EmployeeService;
+using payrallproject.Services.EmpOvertimeService;
+using payrallproject.Services.HolidayService;
+using payrallproject.Services.Leaves2Service;
+using payrallproject.Services.LeavesService;
+using payrallproject.Services.LoanRepaymentService;
+using payrallproject.Services.LoanService;
+using payrallproject.Services.NoPayDayService;
+using payrallproject.Services.OTService;
+using payrallproject.Services.RolesService;
+using payrallproject.Services.SalaryReportService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,26 +36,23 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AuthDbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("dbstring")));
 
-//builder.Services.AddAutoMapper(typeof(MapperProfiles));
+builder.Services.AddAutoMapper(typeof(MapperProfiles).Assembly);
 
 builder.Services.AddScoped<ITokenRepository, TokenRepository>();
 builder.Services.AddTransient<IEmailService, EmailService>();
-
-//builder.Services.AddIdentityCore<User>()
-//    .AddRoles<IdentityRole>()
-//    .AddTokenProvider<DataProtectorTokenProvider<User>>("arithmos")
-//    .AddEntityFrameworkStores<AuthDbContext>()
-//    .AddDefaultTokenProviders();
-
-//builder.Services.Configure<IdentityOptions>(options =>
-//{
-//    options.Password.RequireNonAlphanumeric = false;
-//    options.Password.RequireDigit = false;
-//    options.Password.RequireLowercase = false;
-//    options.Password.RequireUppercase = false;
-//    options.Password.RequiredLength = 6;
-//    options.Password.RequiredUniqueChars = 1;
-//});
+builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+builder.Services.AddScoped<IRolesService, RolesService>();
+builder.Services.AddScoped<IOTService, OTService>();
+builder.Services.AddScoped<IEmployeeCategoriesService, EmployeeCategoriesService>();
+builder.Services.AddScoped<IDepartmentService, DepartmentService>();
+builder.Services.AddScoped<ILoanService, LoanService>();
+builder.Services.AddScoped<ISalaryReportService, SalaryReportService>();
+builder.Services.AddScoped<ILoanRepaymentService, LoanRepaymentService>();
+builder.Services.AddScoped<ILeavesService, LeavesService>();
+builder.Services.AddScoped<INoPayDayService, NoPayDayService>();
+builder.Services.AddScoped<IEmpOvertimeService, EmpOvertimeService>();
+builder.Services.AddScoped<IHolidayService, HolidayService>();
+builder.Services.AddScoped<ILeaves2Service, Leaves2Service>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>

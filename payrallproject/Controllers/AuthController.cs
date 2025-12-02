@@ -288,5 +288,80 @@ namespace payrallproject.Controllers
                 Message = "Password changed successfully"
             });
         }
+
+        [HttpGet("all")]
+        public async Task<ActionResult<List<UserUpdateDto>>> GetAllUsers()
+        {
+            var users = await _dbContext.User.ToListAsync();
+            var userDtos = users.Select(user => new UserUpdateDto
+            {
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                UserName = user.UserName
+            }).ToList();
+
+            return Ok(userDtos);
+        }
+
+        [HttpGet("{email}")]
+        public async Task<ActionResult<User>> GetById(string email)
+        {
+            var user = await _dbContext.User.FirstOrDefaultAsync(u => u.Email == email);
+
+            var userdto = new UserUpdateDto
+            {
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                UserName = user.UserName
+            };
+            if (userdto == null)
+                return NotFound();
+            return Ok(userdto);
+        }
+
+        [HttpPut("{email}")]
+        public async Task<IActionResult> UpdateUser(string email, [FromBody] UserUpdateDto dto)
+        {
+            var user = await _dbContext.User.FirstOrDefaultAsync(u => u.Email == email);
+            if (user == null)
+                return NotFound();
+
+            // Update fields if provided
+            if (!string.IsNullOrWhiteSpace(dto.UserName))
+                user.UserName = dto.UserName;
+            if (!string.IsNullOrWhiteSpace(dto.FirstName))
+                user.FirstName = dto.FirstName;
+            if (!string.IsNullOrWhiteSpace(dto.LastName))
+                user.LastName = dto.LastName;
+            if (!string.IsNullOrWhiteSpace(dto.Email))
+                user.Email = dto.Email;
+
+            _dbContext.User.Update(user);
+            await _dbContext.SaveChangesAsync();
+
+            return Ok(user);
+        }
+
+        [HttpDelete("{email}")]
+        public async Task<IActionResult> DeleteUser(string email)
+        {
+            var user = await _dbContext.User.FirstOrDefaultAsync(u => u.Email == email);
+            if (user == null)
+                return NotFound(new { Message = "User not found" });
+
+            // Remove related UserRoles if any
+            var userRoles = _dbContext.UserRoles.Where(ur => ur.UserId == user.Id).ToList();
+            if (userRoles.Any())
+            {
+                _dbContext.UserRoles.RemoveRange(userRoles);
+            }
+
+            _dbContext.User.Remove(user);
+            await _dbContext.SaveChangesAsync();
+
+            return Ok(new { Message = "User deleted successfully" });
+        }
     }
 }
