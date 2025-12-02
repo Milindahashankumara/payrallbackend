@@ -45,5 +45,16 @@ namespace payrallproject.Controllers
             if (updatedReport == null) return NotFound();
             return Ok(updatedReport);
         }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteSalaryReport(int id)
+        {
+            var result = await _salaryReportService.DeleteSalaryReportAsync(id);
+
+            if (!result)
+                return NotFound($"Salary report with ID {id} not found");
+
+            return Ok($"Salary report with ID {id} deleted successfully");
+        }
     }
 }

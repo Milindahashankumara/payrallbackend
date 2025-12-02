@@ -397,7 +397,7 @@ namespace payrallproject.Services.Leaves2Service
 
             if (yearsOfWork == 0) // First year
             {
-                return (0, 0);
+                return (0, 7);
             }
             else if (yearsOfWork == 1) // Second year
             {
@@ -433,6 +433,58 @@ namespace payrallproject.Services.Leaves2Service
                 Status = leave.Status,
                 Year = leave.Year
             };
+        }
+
+        public async Task<ServiceResponse<DateRangeLeaveSummaryDto>> GetEmployeeLeavesByDateRangeAsync(int employeeId, DateTime fromDate, DateTime toDate)
+        {
+            var response = new ServiceResponse<DateRangeLeaveSummaryDto>();
+
+            try
+            {
+                // Get approved leaves within date range
+                var leaves = await _context.Leaves2
+                    .Where(l => l.EmployeeId == employeeId &&
+                               l.Status == "Approved" &&
+                               l.StartDate >= fromDate &&
+                               l.EndDate <= toDate)
+                    .ToListAsync();
+
+                // Calculate full leave days (excluding half days)
+                var fullLeaveDays = leaves
+                    .Where(l => !l.IsHalfDay)
+                    .Sum(l => (double)l.NumberOfDays);
+
+                // Calculate half days count
+                var halfDaysCount = leaves
+                    .Where(l => l.IsHalfDay)
+                    .Count() * 0.5;
+
+                // Get no-pay days within date range
+                var noPayDays = await _context.NoPayEntries
+                    .Where(n => n.EmployeeId == employeeId &&
+                               n.NoPayDate >= fromDate &&
+                               n.NoPayDate <= toDate)
+                    .CountAsync();
+
+                var summary = new DateRangeLeaveSummaryDto
+                {
+                    EmployeeId = employeeId,
+                    FromDate = fromDate,
+                    ToDate = toDate,
+                    LeaveDays = (decimal)fullLeaveDays,
+                    HalfDays = (decimal)halfDaysCount,
+                    NoPayDays = noPayDays
+                };
+
+                response.Data = summary;
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = $"Error retrieving date range summary: {ex.Message}";
+            }
+
+            return response;
         }
     }
 }

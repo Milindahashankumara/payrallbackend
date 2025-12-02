@@ -60,6 +60,11 @@ namespace payrallproject.Services.SalaryReportService
                 IsDaySalaryBased = isDaySalaryBased,
                 FromDate = dto.FromDate,
                 ToDate = dto.ToDate,
+                AttendanceAllowance = dto.AttendanceAllowance,
+                TransportAllowance = dto.TransportAllowance,
+                FoodAllowance = dto.FoodAllowance,
+                MedicalAllowance = dto.MedicalAllowance,
+                InternetAllowance = dto.InternetAllowance,
             };
 
             report.EmployeeName = employee.FullName;
@@ -78,7 +83,7 @@ namespace payrallproject.Services.SalaryReportService
                 //report.KpiAllowance = ((kr) * wd) / 30;
                 report.KpiAllowance = Math.Round((kr * wd) / 30m, 2);
 
-                report.GrossSalary = report.Wages + report.KpiAllowance + dto.Incentives + dto.Bonus;
+                report.GrossSalary = report.Wages + report.KpiAllowance + dto.Incentives + dto.Bonus + dto.AttendanceAllowance + dto.TransportAllowance + dto.FoodAllowance + dto.MedicalAllowance + dto.InternetAllowance;
                 report.TotalDeductions = dto.SalaryAdvances + dto.Loans + dto.OtherDeductions;
                 report.NetSalary = report.GrossSalary - report.TotalDeductions;
             }
@@ -102,7 +107,7 @@ namespace payrallproject.Services.SalaryReportService
                 report.NoPay = Math.Round((decimal)(dto.NoPayDays * bas / 30), 2);
 
                 report.EpfLiableSalary = basic - report.NoPay;
-                report.GrossSalary = report.EpfLiableSalary + report.KpiAllowance + dto.Bonus + dto.Incentives + report.TotalOtPayment;
+                report.GrossSalary = report.EpfLiableSalary + report.KpiAllowance + dto.Bonus + dto.Incentives + report.TotalOtPayment + dto.AttendanceAllowance + dto.TransportAllowance + dto.FoodAllowance + dto.MedicalAllowance + dto.InternetAllowance;
                 report.Epf1 = report.EpfLiableSalary * 0.08m;
                 report.Epf2 = report.EpfLiableSalary * 0.12m;
                 report.Etf = report.EpfLiableSalary * 0.03m;
@@ -152,6 +157,11 @@ namespace payrallproject.Services.SalaryReportService
             report.NoPayDays = dto.NoPayDays;
             report.Ot1Hours = dto.Ot1Hours;
             report.Ot2Hours = dto.Ot2Hours;
+            report.AttendanceAllowance = dto.AttendanceAllowance;
+            report.TransportAllowance = dto.TransportAllowance;
+            report.FoodAllowance = dto.FoodAllowance;
+            report.MedicalAllowance = dto.MedicalAllowance;
+            report.InternetAllowance = dto.InternetAllowance;
 
             // Recalculate salary fields as needed (reuse your calculation logic here)
             // Example:
@@ -160,6 +170,18 @@ namespace payrallproject.Services.SalaryReportService
 
             await _dbContext.SaveChangesAsync();
             return report;
+        }
+        public async Task<bool> DeleteSalaryReportAsync(int id)
+        {
+            var report = await _dbContext.SalaryReports
+                .FirstOrDefaultAsync(r => r.Id == id);
+
+            if (report == null)
+                return false;
+
+            _dbContext.SalaryReports.Remove(report);
+            await _dbContext.SaveChangesAsync();
+            return true;
         }
     }
 }

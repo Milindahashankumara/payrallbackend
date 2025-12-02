@@ -31,6 +31,11 @@ namespace payrallproject.Models.Domains
         public decimal Ot2Hours { get; set; }
         public DateTime FromDate { get; set; }
         public DateTime ToDate { get; set; }
+        public decimal AttendanceAllowance { get; set; }
+        public decimal TransportAllowance { get; set; }
+        public decimal FoodAllowance { get; set; }
+        public decimal MedicalAllowance { get; set; }
+        public decimal InternetAllowance { get; set; }
 
         // Calculated fields
         public decimal Wages { get; set; }

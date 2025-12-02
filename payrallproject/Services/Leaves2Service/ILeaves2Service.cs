@@ -13,6 +13,7 @@ namespace payrallproject.Services.Leaves2Service
         Task<ServiceResponse<List<LeaveBalanceDto>>> GetEmployeeLeaveBalanceAsync(int employeeId, int year);
         Task<ServiceResponse<decimal>> GetRemainingLeavesAsync(int employeeId, int year, string leaveType);
         Task<bool> IsEmployeeEligibleForLeaves(int employeeId);
+        Task<ServiceResponse<DateRangeLeaveSummaryDto>> GetEmployeeLeavesByDateRangeAsync(int employeeId, DateTime fromDate, DateTime toDate);
     }
 
     public class ServiceResponse<T>
@@ -20,5 +21,6 @@ namespace payrallproject.Services.Leaves2Service
         public T? Data { get; set; }
         public bool Success { get; set; } = true;
         public string Message { get; set; } = string.Empty;
+
     }
 }

@@ -26,5 +26,6 @@ namespace payrallproject.Models.Dtos
         public string? BankBranch { get; set; }
         public string? TaxIdentificationNumber { get; set; }
         public bool? HasTaxExemption { get; set; }
+        public int? TotalCompensation { get; set; }
     }
 }

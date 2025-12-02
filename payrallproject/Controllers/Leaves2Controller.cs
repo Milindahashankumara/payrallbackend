@@ -86,5 +86,30 @@ namespace payrallproject.Controllers
             var isEligible = await _leavesService.IsEmployeeEligibleForLeaves(employeeId);
             return Ok(isEligible);
         }
+        [HttpGet("employee/{employeeId}/date-range")]
+        public async Task<ActionResult<ServiceResponse<DateRangeLeaveSummaryDto>>> GetEmployeeLeavesByDateRange(
+    int employeeId, [FromQuery] DateTime fromDate, [FromQuery] DateTime toDate)
+        {
+            var response = await _leavesService.GetEmployeeLeavesByDateRangeAsync(employeeId, fromDate, toDate);
+            return Ok(response);
+        }
+
+        [HttpPost("create-leave-single")]
+        public async Task<ActionResult<ServiceResponse<Leaves2Dto>>> CreateSingleLeave(CreateLeaveDto createLeaveDto)
+        {
+            var response = await _leavesService.CreateLeaveAsync(createLeaveDto);
+            if (!response.Success)
+                return BadRequest(response);
+            return Ok(response);
+        }
+
+        [HttpPost("create-nopay-single")]
+        public async Task<ActionResult<ServiceResponse<NoPayEntryDto>>> CreateSingleNoPayDay(CreateNoPayDto createNoPayDto)
+        {
+            var response = await _leavesService.CreateNoPayDayAsync(createNoPayDto);
+            if (!response.Success)
+                return BadRequest(response);
+            return Ok(response);
+        }
     }
 }

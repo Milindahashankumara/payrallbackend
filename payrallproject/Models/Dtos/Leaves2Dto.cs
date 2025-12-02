@@ -60,4 +60,14 @@
         public DateTime NoPayDate { get; set; }
         public string? Reason { get; set; }
     }
+
+    public class DateRangeLeaveSummaryDto
+    {
+        public int EmployeeId { get; set; }
+        public DateTime FromDate { get; set; }
+        public DateTime ToDate { get; set; }
+        public decimal LeaveDays { get; set; }
+        public decimal HalfDays { get; set; }
+        public int NoPayDays { get; set; }
+    }
 }

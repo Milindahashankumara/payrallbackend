@@ -23,5 +23,10 @@
         public int? BasicStationarySal { get; set; }
         public int? basicSala { get; set; }
         public decimal NoPay { get; set; }
+        public decimal AttendanceAllowance { get; set; }
+        public decimal TransportAllowance { get; set; }
+        public decimal FoodAllowance { get; set; }
+        public decimal MedicalAllowance { get; set; }
+        public decimal InternetAllowance { get; set; }
     }
 }

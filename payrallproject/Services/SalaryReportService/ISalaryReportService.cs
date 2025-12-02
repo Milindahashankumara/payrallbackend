@@ -9,5 +9,6 @@ namespace payrallproject.Services.SalaryReportService
         Task<List<SalaryReport>> GetAllSalaryReportsAsync();
         Task<List<SalaryReport>> GetAllSalaryReportsByEmployeeIdAsync(int employeeId);
         Task<SalaryReport?> UpdateSalaryReportAsync(int id, SalaryReportDto dto);
+        Task<bool> DeleteSalaryReportAsync(int id);
     }
 }
