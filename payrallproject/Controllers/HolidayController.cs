@@ -8,7 +8,7 @@ using payrallproject.Services.HolidayService;
 
 namespace payrallproject.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/specialHolidays")]
     [ApiController]
     public class HolidayController : ControllerBase
     {

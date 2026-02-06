@@ -25,19 +25,37 @@ namespace payrallproject.Services.SalaryReportService
                 .Include(e => e.EmployeeCategories)
                 .FirstOrDefaultAsync(e => e.Id == dto.EmployeeId);
 
+            if (employee == null)
+                throw new Exception($"Employee with ID {dto.EmployeeId} not found.");
+
+            if (employee.DepartmentID == null)
+                throw new Exception($"Employee {employee.FullName} does not have a department assigned.");
+
             var department = await _dbContext.Departments
                 .FirstOrDefaultAsync(e => e.Id == employee.DepartmentID);
 
+            if (department == null)
+                throw new Exception($"Department with ID {employee.DepartmentID} not found.");
+
+            if (department.EmployeeCategoriesId == null)
+                throw new Exception($"Department {department.DepartmentName} does not have an employee category assigned.");
+
             var categ = await _dbContext.EmployeeCategories
                 .FirstOrDefaultAsync(e => e.Id == department.EmployeeCategoriesId);
+
+            if (categ == null)
+                throw new Exception($"Employee category with ID {department.EmployeeCategoriesId} not found.");
 
             var ot1rate = await _dbContext.OT
                 .FirstOrDefaultAsync(e => e.Id == 2);
             var ot2rate = await _dbContext.OT
                 .FirstOrDefaultAsync(e => e.Id == 1);
 
-            if (employee == null || employee.EmployeeCategories == null)
-                throw new Exception("Employee or category not found.");
+            if (ot1rate == null || ot2rate == null)
+                throw new Exception("OT rates not configured properly in the system.");
+
+            if (employee.EmployeeCategories == null)
+                throw new Exception("Employee category not found.");
 
             var isDaySalaryBased = employee.EmployeeCategories.DaySalarybased ?? false;
 

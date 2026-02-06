@@ -6,7 +6,7 @@ using payrallproject.Services.DepartmentService;
 
 namespace payrallproject.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/departments")]
     [ApiController]
     public class DepartmentController : ControllerBase
     {

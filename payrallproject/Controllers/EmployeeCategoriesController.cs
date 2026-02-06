@@ -6,7 +6,7 @@ using payrallproject.Services.EmployeeCategoriesService;
 
 namespace payrallproject.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/empcategories")]
     [ApiController]
     public class EmployeeCategoriesController : ControllerBase
     {

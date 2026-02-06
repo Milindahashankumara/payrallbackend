@@ -20,8 +20,21 @@ namespace payrallproject.Controllers
         [HttpPost("generate")]
         public async Task<IActionResult> GenerateSalaryReport([FromBody] SalaryReportDto dto)
         {
-            var report = await _salaryReportService.GenerateAndStoreSalaryReportAsync(dto);
-            return Ok(report);
+            try
+            {
+                var report = await _salaryReportService.GenerateAndStoreSalaryReportAsync(dto);
+                return Ok(report);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"ERROR: {ex.Message}");
+                Console.WriteLine($"STACK: {ex.StackTrace}");
+                if (ex.InnerException != null)
+                {
+                    Console.WriteLine($"INNER: {ex.InnerException.Message}");
+                }
+                return StatusCode(500, new { message = ex.Message, details = ex.InnerException?.Message, stackTrace = ex.StackTrace });
+            }
         }
 
         [HttpGet("salaryreports")]
