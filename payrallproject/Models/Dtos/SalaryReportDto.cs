@@ -20,6 +20,7 @@
         public DateTime ToDate { get; set; }
         public int? DaySalary { get; set; }
         public int? KpiRate { get; set; }
+        public decimal? KpiAmount { get; set; }
         public int? BasicStationarySal { get; set; }
         public int? basicSala { get; set; }
         public decimal NoPay { get; set; }

@@ -22,7 +22,30 @@ namespace payrallproject.Controllers
         {
             try
             {
+                // Debug logging - Input
+                Console.WriteLine($"[DEBUG INPUT] ====================================");
+                Console.WriteLine($"[DEBUG INPUT] EmployeeId: {dto.EmployeeId}");
+                Console.WriteLine($"[DEBUG INPUT] DaySalary: {dto.DaySalary}");
+                Console.WriteLine($"[DEBUG INPUT] KpiRate (Casual): {dto.KpiRate}");
+                Console.WriteLine($"[DEBUG INPUT] KpiAmount (Staff): {dto.KpiAmount}");
+                Console.WriteLine($"[DEBUG INPUT] WorkingDays: {dto.WorkingDays}");
+                Console.WriteLine($"[DEBUG INPUT] Incentives: {dto.Incentives}");
+                Console.WriteLine($"[DEBUG INPUT] ===================================="); ;
+
                 var report = await _salaryReportService.GenerateAndStoreSalaryReportAsync(dto);
+
+                // Debug logging - Output
+                Console.WriteLine($"[DEBUG OUTPUT] ====================================");
+                Console.WriteLine($"[DEBUG OUTPUT] Report ID: {report.Id}");
+                Console.WriteLine($"[DEBUG OUTPUT] IsDaySalaryBased: {report.IsDaySalaryBased}");
+                Console.WriteLine($"[DEBUG OUTPUT] DaySalary: {report.DaySalary}");
+                Console.WriteLine($"[DEBUG OUTPUT] KpiRate: {report.KpiRate}");
+                Console.WriteLine($"[DEBUG OUTPUT] KpiAllowance saved: {report.KpiAllowance}");
+                Console.WriteLine($"[DEBUG OUTPUT] Wages: {report.Wages}");
+                Console.WriteLine($"[DEBUG OUTPUT] Incentives calculated: {report.Incentives}");
+                Console.WriteLine($"[DEBUG OUTPUT] GrossSalary: {report.GrossSalary}");
+                Console.WriteLine($"[DEBUG OUTPUT] ===================================="); ;
+
                 return Ok(report);
             }
             catch (Exception ex)
