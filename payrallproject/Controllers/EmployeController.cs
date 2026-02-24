@@ -22,7 +22,9 @@ namespace payrallproject.Controllers
             if (employeDto == null)
                 return BadRequest();
 
+            Console.WriteLine($"[CONTROLLER] Received JobRoleId: {employeDto.JobRoleId}");
             var addedEmployee = await _employeeService.AddEmployeAsync(employeDto);
+            Console.WriteLine($"[CONTROLLER] Saved Employee JobRoleId: {addedEmployee.JobRoleId}");
             return Ok(addedEmployee);
         }
 

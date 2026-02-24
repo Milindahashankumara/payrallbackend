@@ -13,6 +13,7 @@ namespace payrallproject.Models.Dtos
         public DateTime? TerminationDate { get; set; }
         public string? PhoneNumber { get; set; }
         public int? DepartmentID { get; set; }
+        public int? JobRoleId { get; set; }
         public int? EmployeeCategoriesID { get; set; }
         public int? BasicSalary { get; set; }
         public int? DaySalary { get; set; }

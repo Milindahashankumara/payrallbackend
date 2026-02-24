@@ -23,6 +23,7 @@ namespace payrallproject.Services.SalaryReportService
 
             var employee = await _dbContext.Employe
                 .Include(e => e.EmployeeCategories)
+                .Include(e => e.JobRole)
                 .FirstOrDefaultAsync(e => e.Id == dto.EmployeeId);
 
             if (employee == null)
@@ -89,6 +90,7 @@ namespace payrallproject.Services.SalaryReportService
             report.EmployeeNumber = employee.EmployeeNumber;
             report.DepartmentName = department.DepartmentName;
             report.CategaryName = categ.CategoryName;
+            report.JobRoleName = employee.JobRole?.RoleName;
 
             if (isDaySalaryBased)
             {
@@ -165,6 +167,9 @@ namespace payrallproject.Services.SalaryReportService
         {
             return await _dbContext.SalaryReports
                 .Include(r => r.Employee)
+                .OrderByDescending(r => r.GeneratedOn)
+                .ThenByDescending(r => r.Year)
+                .ThenByDescending(r => r.Month)
                 .ToListAsync();
         }
         public async Task<List<SalaryReport>> GetAllSalaryReportsByEmployeeIdAsync(int employeeId)
@@ -172,6 +177,9 @@ namespace payrallproject.Services.SalaryReportService
             return await _dbContext.SalaryReports
                 .Include(r => r.Employee)
                 .Where(r => r.EmployeeId == employeeId)
+                .OrderByDescending(r => r.GeneratedOn)
+                .ThenByDescending(r => r.Year)
+                .ThenByDescending(r => r.Month)
                 .ToListAsync();
         }
         public async Task<SalaryReport?> UpdateSalaryReportAsync(int id, SalaryReportDto dto)

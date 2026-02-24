@@ -20,6 +20,7 @@ namespace payrallproject.Data
         public DbSet<OT> OT { get; set; }
         public DbSet<EmployeeCategories> EmployeeCategories { get; set; }
         public DbSet<Department> Departments { get; set; }
+        public DbSet<JobRole> JobRoles { get; set; }
         public DbSet<EmployeeOvertime> EmployeeOvertimes { get; set; }
         public DbSet<SalaryReport> SalaryReports { get; set; }
         public DbSet<Loans> Loans { get; set; }

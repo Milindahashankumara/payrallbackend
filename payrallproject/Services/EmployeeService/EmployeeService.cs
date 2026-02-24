@@ -20,10 +20,13 @@ namespace payrallproject.Services.EmployeeService
 
         public async Task<Employe> AddEmployeAsync(EmployeDto employeDto)
         {
+            Console.WriteLine($"[SERVICE] Received DTO JobRoleId: {employeDto.JobRoleId}");
             var NewEmploye = _mapper.Map<Employe>(employeDto);
+            Console.WriteLine($"[SERVICE] Mapped Employee JobRoleId: {NewEmploye.JobRoleId}");
             NewEmploye.IsActive = true;
             await _dbContext.Employe.AddAsync(NewEmploye);
             await _dbContext.SaveChangesAsync();
+            Console.WriteLine($"[SERVICE] Saved to DB - Employee ID: {NewEmploye.Id}, JobRoleId: {NewEmploye.JobRoleId}");
             return NewEmploye;
         }
 

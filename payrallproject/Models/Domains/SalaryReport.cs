@@ -12,10 +12,11 @@ namespace payrallproject.Models.Domains
         public Employe Employee { get; set; }
         public int Year { get; set; }
         public int Month { get; set; }
-        public string EmployeeName { get; set; }
-        public string EmployeeNumber { get; set; }
-        public string CategaryName { get; set; }
-        public string DepartmentName { get; set; }
+        public string? EmployeeName { get; set; }
+        public string? EmployeeNumber { get; set; }
+        public string? CategaryName { get; set; }
+        public string? DepartmentName { get; set; }
+        public string? JobRoleName { get; set; }
 
         // Input fields
         public int WorkingDays { get; set; }

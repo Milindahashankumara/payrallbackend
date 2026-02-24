@@ -10,6 +10,7 @@ using payrallproject.Models.Domains;
 using payrallproject.Models.Helpter;
 using payrallproject.Services.AuthService;
 using payrallproject.Services.DepartmentService;
+using payrallproject.Services.JobRoleService;
 using payrallproject.Services.EmailServices;
 using payrallproject.Services.EmployeeCategoriesService;
 using payrallproject.Services.EmployeeService;
@@ -28,7 +29,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+    options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
+});
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -45,6 +50,7 @@ builder.Services.AddScoped<IRolesService, RolesService>();
 builder.Services.AddScoped<IOTService, OTService>();
 builder.Services.AddScoped<IEmployeeCategoriesService, EmployeeCategoriesService>();
 builder.Services.AddScoped<IDepartmentService, DepartmentService>();
+builder.Services.AddScoped<IJobRoleService, JobRoleService>();
 builder.Services.AddScoped<ILoanService, LoanService>();
 builder.Services.AddScoped<ISalaryReportService, SalaryReportService>();
 builder.Services.AddScoped<ILoanRepaymentService, LoanRepaymentService>();
