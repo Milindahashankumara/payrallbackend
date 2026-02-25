@@ -21,6 +21,17 @@ namespace payrallproject.Services.EmployeeService
         public async Task<Employe> AddEmployeAsync(EmployeDto employeDto)
         {
             Console.WriteLine($"[SERVICE] Received DTO JobRoleId: {employeDto.JobRoleId}");
+            
+            // ✅ LAYER 2: Check if Employee Number already exists (Traffic Controller)
+            var employeeNumberExists = await _dbContext.Employe
+                .AnyAsync(e => e.EmployeeNumber == employeDto.EmployeeNumber);
+            
+            if (employeeNumberExists)
+            {
+                // Stop the process and send a clean, friendly error message
+                throw new InvalidOperationException($"Employee Number '{employeDto.EmployeeNumber}' already exists. Please use a different Employee Number.");
+            }
+            
             var NewEmploye = _mapper.Map<Employe>(employeDto);
             Console.WriteLine($"[SERVICE] Mapped Employee JobRoleId: {NewEmploye.JobRoleId}");
             NewEmploye.IsActive = true;
@@ -174,6 +185,21 @@ namespace payrallproject.Services.EmployeeService
             {
                 return null;
             }
+            
+            // ✅ LAYER 2: Check if Employee Number is being changed to one that already exists
+            // Only check if the employee number is different from the current one
+            if (SelectedEmploye.EmployeeNumber != employeDto.EmployeeNumber)
+            {
+                var employeeNumberExists = await _dbContext.Employe
+                    .AnyAsync(e => e.EmployeeNumber == employeDto.EmployeeNumber && e.Id != id);
+                
+                if (employeeNumberExists)
+                {
+                    // Stop the process and send a clean, friendly error message
+                    throw new InvalidOperationException($"Employee Number '{employeDto.EmployeeNumber}' already exists. Please use a different Employee Number.");
+                }
+            }
+            
             _mapper.Map(employeDto, SelectedEmploye);
             await _dbContext.SaveChangesAsync();
             return SelectedEmploye;

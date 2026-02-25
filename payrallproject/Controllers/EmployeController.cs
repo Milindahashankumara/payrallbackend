@@ -22,10 +22,23 @@ namespace payrallproject.Controllers
             if (employeDto == null)
                 return BadRequest();
 
-            Console.WriteLine($"[CONTROLLER] Received JobRoleId: {employeDto.JobRoleId}");
-            var addedEmployee = await _employeeService.AddEmployeAsync(employeDto);
-            Console.WriteLine($"[CONTROLLER] Saved Employee JobRoleId: {addedEmployee.JobRoleId}");
-            return Ok(addedEmployee);
+            try
+            {
+                Console.WriteLine($"[CONTROLLER] Received JobRoleId: {employeDto.JobRoleId}");
+                var addedEmployee = await _employeeService.AddEmployeAsync(employeDto);
+                Console.WriteLine($"[CONTROLLER] Saved Employee JobRoleId: {addedEmployee.JobRoleId}");
+                return Ok(addedEmployee);
+            }
+            catch (InvalidOperationException ex)
+            {
+                // Return clean, friendly error message to frontend
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                // Catch any other unexpected errors
+                return StatusCode(500, new { message = "An error occurred while creating the employee.", details = ex.Message });
+            }
         }
 
         [HttpGet]
@@ -52,12 +65,25 @@ namespace payrallproject.Controllers
         [Route("{id:int}")]
         public async Task<IActionResult> UpdateEmployee([FromRoute] int id, [FromBody] EmployeDto employeeDto)
         {
-            var SelectedEmployee = await _employeeService.UpdateEmployeAsync(id, employeeDto);
-            if (SelectedEmployee == null)
+            try
             {
-                return NotFound();
+                var SelectedEmployee = await _employeeService.UpdateEmployeAsync(id, employeeDto);
+                if (SelectedEmployee == null)
+                {
+                    return NotFound();
+                }
+                return Ok(SelectedEmployee);
             }
-            return Ok(SelectedEmployee);
+            catch (InvalidOperationException ex)
+            {
+                // Return clean, friendly error message to frontend
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                // Catch any other unexpected errors
+                return StatusCode(500, new { message = "An error occurred while updating the employee.", details = ex.Message });
+            }
         }
         [HttpDelete]
         [Route("{id:int}")]
