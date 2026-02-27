@@ -22,7 +22,7 @@ namespace payrallproject.Services.EmployeeService
         {
             Console.WriteLine($"[SERVICE] Received DTO JobRoleId: {employeDto.JobRoleId}");
 
-            // ✅ LAYER 2: Check if Employee Number already exists (Traffic Controller)
+            //  LAYER 2: Check if Employee Number already exists (Traffic Controller)
             var employeeNumberExists = await _dbContext.Employe
                 .AnyAsync(e => e.EmployeeNumber == employeDto.EmployeeNumber);
 
