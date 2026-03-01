@@ -17,13 +17,13 @@ namespace payrallproject.Models.Domains
         public string? PhoneNumber { get; set; }
         public int? DepartmentID { get; set; }
         [ForeignKey(nameof(DepartmentID))]
-        public Department Department { get; set; }
+        public Department? Department { get; set; }
         public int? JobRoleId { get; set; }
         [ForeignKey(nameof(JobRoleId))]
-        public JobRole JobRole { get; set; }
+        public JobRole? JobRole { get; set; }
         public int? EmployeeCategoriesID { get; set; }
         [ForeignKey(nameof(EmployeeCategoriesID))]
-        public EmployeeCategories EmployeeCategories { get; set; }
+        public EmployeeCategories? EmployeeCategories { get; set; }
         public int? BasicSalary { get; set; }
         public int? DaySalary { get; set; }
         public int? KpiRate { get; set; }

@@ -9,7 +9,7 @@ namespace payrallproject.Models.Domains
         public int Id { get; set; }
         public int EmployeeId { get; set; }
         [ForeignKey(nameof(EmployeeId))]
-        public Employe Employee { get; set; }
+        public Employe? Employee { get; set; }
         public int Year { get; set; }
         public int Month { get; set; }
         public string? EmployeeName { get; set; }

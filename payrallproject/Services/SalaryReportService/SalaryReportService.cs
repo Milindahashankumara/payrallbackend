@@ -16,6 +16,13 @@ namespace payrallproject.Services.SalaryReportService
 
         public async Task<SalaryReport> GenerateAndStoreSalaryReportAsync(SalaryReportDto dto)
         {
+            // Validate input
+            if (dto == null)
+                throw new ArgumentNullException(nameof(dto), "Salary report data cannot be null.");
+
+            if (dto.EmployeeId <= 0)
+                throw new ArgumentException("Invalid Employee ID.", nameof(dto.EmployeeId));
+
             if (dto.FromDate > dto.ToDate)
             {
                 throw new Exception("FromDate cannot be after ToDate");
@@ -24,32 +31,47 @@ namespace payrallproject.Services.SalaryReportService
             var employee = await _dbContext.Employe
                 .Include(e => e.EmployeeCategories)
                 .Include(e => e.JobRole)
+                .AsNoTracking()
                 .FirstOrDefaultAsync(e => e.Id == dto.EmployeeId);
 
             if (employee == null)
                 throw new Exception($"Employee with ID {dto.EmployeeId} not found.");
 
-            if (employee.DepartmentID == null)
-                throw new Exception($"Employee {employee.FullName} does not have a department assigned.");
+            // Get employee category from employee record (not from department)
+            if (employee.EmployeeCategoriesID == null)
+                throw new Exception($"Employee {employee.FullName} does not have an employee category assigned. Please assign a category in the employee profile.");
 
-            var department = await _dbContext.Departments
-                .FirstOrDefaultAsync(e => e.Id == employee.DepartmentID);
-
-            if (department == null)
-                throw new Exception($"Department with ID {employee.DepartmentID} not found.");
-
-            if (department.EmployeeCategoriesId == null)
-                throw new Exception($"Department {department.DepartmentName} does not have an employee category assigned.");
-
-            var categ = await _dbContext.EmployeeCategories
-                .FirstOrDefaultAsync(e => e.Id == department.EmployeeCategoriesId);
+            // Get category directly from employee (already loaded via Include)
+            var categ = employee.EmployeeCategories;
 
             if (categ == null)
-                throw new Exception($"Employee category with ID {department.EmployeeCategoriesId} not found.");
+            {
+                // Fallback: Load category if not already loaded
+                categ = await _dbContext.EmployeeCategories
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(e => e.Id == employee.EmployeeCategoriesID);
+
+                if (categ == null)
+                    throw new Exception($"Employee category with ID {employee.EmployeeCategoriesID} not found.");
+            }
+
+            // Get department for display name only (optional)
+            string departmentName = "N/A";
+            if (employee.DepartmentID != null)
+            {
+                var department = await _dbContext.Departments
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(e => e.Id == employee.DepartmentID);
+
+                if (department != null)
+                    departmentName = department.DepartmentName;
+            }
 
             var ot1rate = await _dbContext.OT
+                .AsNoTracking()
                 .FirstOrDefaultAsync(e => e.Id == 2);
             var ot2rate = await _dbContext.OT
+                .AsNoTracking()
                 .FirstOrDefaultAsync(e => e.Id == 1);
 
             if (ot1rate == null || ot2rate == null)
@@ -88,7 +110,7 @@ namespace payrallproject.Services.SalaryReportService
 
             report.EmployeeName = employee.FullName;
             report.EmployeeNumber = employee.EmployeeNumber;
-            report.DepartmentName = department.DepartmentName;
+            report.DepartmentName = departmentName;
             report.CategaryName = categ.CategoryName;
             report.JobRoleName = employee.JobRole?.RoleName;
 
@@ -157,9 +179,25 @@ namespace payrallproject.Services.SalaryReportService
                 report.NetSalary = report.GrossSalary - report.TotalDeductions;
             }
 
-            _dbContext.SalaryReports.Add(report);
-            await _dbContext.SaveChangesAsync();
-            Console.WriteLine($"[SERVICE CREATE] Saved to DB: ID={report.Id}, KPI={report.KpiAllowance}, Incentives={report.Incentives}");
+            try
+            {
+                _dbContext.SalaryReports.Add(report);
+                await _dbContext.SaveChangesAsync();
+                Console.WriteLine($"[SERVICE CREATE] Saved to DB: ID={report.Id}, KPI={report.KpiAllowance}, Incentives={report.Incentives}");
+            }
+            catch (DbUpdateException dbEx)
+            {
+                Console.WriteLine($"[DATABASE ERROR] Failed to save salary report: {dbEx.Message}");
+                if (dbEx.InnerException != null)
+                    Console.WriteLine($"[DATABASE ERROR INNER] {dbEx.InnerException.Message}");
+                throw new Exception($"Failed to save salary report to database: {dbEx.InnerException?.Message ?? dbEx.Message}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[SAVE ERROR] Unexpected error: {ex.Message}");
+                throw new Exception($"Unexpected error while saving salary report: {ex.Message}");
+            }
+
             return report;
         }
 
@@ -184,6 +222,9 @@ namespace payrallproject.Services.SalaryReportService
         }
         public async Task<SalaryReport?> UpdateSalaryReportAsync(int id, SalaryReportDto dto)
         {
+            if (dto == null)
+                throw new ArgumentNullException(nameof(dto), "Salary report data cannot be null.");
+
             var report = await _dbContext.SalaryReports
                 .Include(r => r.Employee)
                     .ThenInclude(e => e.EmployeeCategories)
@@ -293,8 +334,24 @@ namespace payrallproject.Services.SalaryReportService
                 report.NetSalary = report.GrossSalary - report.TotalDeductions;
             }
 
-            await _dbContext.SaveChangesAsync();
-            Console.WriteLine($"[SERVICE UPDATE] SAVED TO DB: ID={report.Id}, KPI={report.KpiAllowance}, Incentives={report.Incentives}, GrossSalary={report.GrossSalary}");
+            try
+            {
+                await _dbContext.SaveChangesAsync();
+                Console.WriteLine($"[SERVICE UPDATE] SAVED TO DB: ID={report.Id}, KPI={report.KpiAllowance}, Incentives={report.Incentives}, GrossSalary={report.GrossSalary}");
+            }
+            catch (DbUpdateException dbEx)
+            {
+                Console.WriteLine($"[DATABASE ERROR] Failed to update salary report: {dbEx.Message}");
+                if (dbEx.InnerException != null)
+                    Console.WriteLine($"[DATABASE ERROR INNER] {dbEx.InnerException.Message}");
+                throw new Exception($"Failed to update salary report in database: {dbEx.InnerException?.Message ?? dbEx.Message}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[UPDATE ERROR] Unexpected error: {ex.Message}");
+                throw new Exception($"Unexpected error while updating salary report: {ex.Message}");
+            }
+
             return report;
         }
         public async Task<bool> DeleteSalaryReportAsync(int id)
